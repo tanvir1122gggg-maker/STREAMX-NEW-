@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090509">
+<meta name="description" content="STREAMX STAR LIVE TV PRO ULTRA ENGINE — November 2026 refreshed preview build.">
+<title>STREAMX LIVE TV — PRO ULTRA v1.0.1 Preview</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<script type="importmap">
+{"imports":{"firebase/app":"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js","firebase/database":"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js","firebase/auth":"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"}}
+</script>
+<style>
+:root{
+ color-scheme:dark;--bg-main:#070407;--bg-card:rgba(22,10,14,.88);--bg-surface:#14090c;--bg-elevated:#1d0c12;
+ --border-glow:#ff304f;--border-soft:rgba(255,255,255,.09);--text-main:#fff;--text-muted:#b5a2a8;
+ --brand-red:#ff4e3c;--brand-cherry:#990011;--accent-gradient:linear-gradient(135deg,#ff1e3c 0%,#ff7b00 100%);
+ --shadow-glow:rgba(255,48,79,.35);--cls-red:#ff2a2a;--cls-orange:#ff7b00;--cls-yellow:#ffdd00;
+ --cls-green:#00ff66;--cls-lightblue:#00e5ff;--cls-blue:#0044ff;--cls-purple:#b300ff;--cls-white:#fff;--cls-pink:#ff0077;
+ --iptv-border:rgba(255,255,255,.08);--iptv-border-focus:rgba(255,30,60,.4);--iptv-green:#35df6f;--page-width:1440px;--header-height:78px
+}
+[data-theme=light]{color-scheme:light;--bg-main:#f6f3f5;--bg-card:rgba(255,255,255,.96);--bg-surface:#fff;--bg-elevated:#fff;--border-soft:rgba(70,20,35,.13);--text-main:#21151a;--text-muted:#6e5b63}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;scroll-padding-top:95px}
+body{min-height:100vh;background:var(--bg-main);color:var(--text-main);font-family:Poppins,"Hind Siliguri",system-ui,sans-serif;overflow-x:hidden;padding-top:var(--header-height);background-image:radial-gradient(circle at 50% -10%,rgba(255,30,60,.17),transparent 48%)}
+button,input,textarea,select{font:inherit}button{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--cls-lightblue);outline-offset:3px}
+a{color:inherit}img,video,iframe{max-width:100%}::selection{background:var(--brand-red);color:#fff}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:var(--bg-main)}::-webkit-scrollbar-thumb{background:var(--brand-cherry);border-radius:20px}
+.container{width:min(94%,var(--page-width));margin-inline:auto}.muted{color:var(--text-muted)}.small{font-size:.78rem}.hidden{display:none!important}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;font-size:.72rem;font-weight:700;border:1px solid var(--border-soft)}
+.pill.live{color:#fff;background:#d80e31;border-color:#ff526c}.pill.success{color:var(--cls-green)}.pill.warning{color:var(--cls-yellow)}
+.section{margin:28px auto}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}
+.section-heading h2{font-size:clamp(1.05rem,2vw,1.45rem);font-weight:800;display:flex;align-items:center;gap:10px}
+.section-heading h2:before{content:"";height:24px;width:5px;border-radius:5px;background:var(--brand-red);box-shadow:0 0 14px var(--brand-red)}
+.section-heading p{font-size:.82rem;color:var(--text-muted)}
+.card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:18px;box-shadow:0 12px 32px rgba(0,0,0,.14)}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;border:1px solid var(--border-soft);border-radius:12px;padding:11px 15px;cursor:pointer;font-weight:700;font-size:.85rem;background:var(--bg-surface);transition:transform .2s,border-color .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px);border-color:var(--brand-red)}.btn-primary{background:var(--accent-gradient);border-color:transparent;color:#fff;box-shadow:0 6px 18px var(--shadow-glow)}
+.btn-quiet{background:transparent}.btn-danger{background:#b5092b;border-color:#e52c4e;color:#fff}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.field{width:100%;padding:12px 13px;border-radius:11px;border:1px solid var(--border-soft);background:var(--bg-surface);color:var(--text-main);outline:none}
+.field:focus{border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(255,48,79,.12)}.field-label{display:block;font-size:.8rem;color:var(--text-muted);font-weight:600;margin:0 0 7px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}.form-group{margin-bottom:14px}textarea.field{min-height:112px;resize:vertical}hr{border:0;border-top:1px solid var(--border-soft);margin:18px 0}
+.site-header{position:fixed;inset:0 0 auto;z-index:1000;min-height:var(--header-height);display:flex;align-items:center;background:rgba(9,4,7,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,48,79,.2)}
+[data-theme=light] .site-header{background:rgba(255,255,255,.9)}.header-inner{width:min(94%,var(--page-width));margin:auto;display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;font-weight:900;letter-spacing:1px;font-size:1.15rem}
+.brand-mark{width:39px;height:39px;display:grid;place-items:center;border-radius:13px;background:var(--accent-gradient);color:#fff;box-shadow:0 0 22px var(--shadow-glow)}
+.brand-name{background:linear-gradient(135deg,var(--cls-red),var(--cls-pink));background-clip:text;-webkit-background-clip:text;color:transparent}
+.header-search{position:relative;flex:1;max-width:600px;margin-inline:auto}.header-search i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
+.header-search input{width:100%;padding:12px 15px 12px 43px;background:var(--bg-surface);border:1px solid var(--border-soft);border-radius:14px;color:var(--text-main)}
+.header-actions{display:flex;align-items:center;gap:8px}.icon-btn{width:43px;height:43px;border-radius:13px;border:1px solid var(--border-soft);background:var(--bg-surface);display:grid;place-items:center;cursor:pointer}
+.icon-btn:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.release-banner{position:relative;overflow:hidden;margin:22px auto 0;padding:18px 20px;border:1px solid rgba(255,80,70,.4);border-radius:18px;background:linear-gradient(105deg,rgba(153,0,17,.36),rgba(255,123,0,.12) 58%,rgba(20,9,12,.8));display:flex;align-items:center;justify-content:space-between;gap:18px}
+.release-left{display:flex;align-items:center;gap:14px;min-width:0;position:relative;z-index:1}.release-icon{flex:0 0 48px;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--accent-gradient);font-size:1.2rem}
+.release-banner h1{font-size:clamp(1rem,2.5vw,1.35rem);font-weight:800}.release-banner p{font-size:.8rem;color:var(--text-muted);margin-top:3px}
+.release-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.release-actions{display:flex;gap:8px;position:relative;z-index:1}.release-banner.dismissed{display:none}
+main{padding-bottom:55px}.layout-grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(300px,1fr);gap:22px;margin-top:24px}.player-column{min-width:0}
+.screen-wrapper{position:relative;aspect-ratio:16/9;width:100%;background:#000;border:1px solid rgba(255,48,79,.25);border-radius:24px;overflow:hidden;box-shadow:0 22px 55px rgba(0,0,0,.48)}
+#mainVideo,#embedFrame{width:100%;height:100%;display:block;border:0;object-fit:contain;background:#000}#embedFrame{display:none}
+.player-overlay{position:absolute;inset:0;pointer-events:none;display:flex;align-items:flex-end;justify-content:space-between;padding:16px;background:linear-gradient(transparent 60%,rgba(0,0,0,.6))}
+.player-overlay>*{pointer-events:auto}.player-chip{padding:7px 10px;border-radius:9px;background:rgba(0,0,0,.65);font-size:.75rem;font-weight:700}
+.player-tools{display:flex;gap:8px}.player-tools button{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.6);cursor:pointer}
+.player-tools button:hover{background:var(--brand-red)}.player-menu-trigger{position:absolute;top:14px;right:14px;z-index:8;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,48,79,.5);background:rgba(35,5,12,.85);cursor:pointer}
+.player-sidebar-overlay{position:absolute;inset:0 0 0 auto;width:min(310px,90%);z-index:10;padding:17px;background:rgba(13,5,8,.97);border-left:1px solid rgba(255,48,79,.3);transform:translateX(102%);transition:transform .25s ease;display:flex;flex-direction:column}
+.player-sidebar-overlay.open{transform:translateX(0)}.player-sidebar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.player-channel-list{overflow:auto;display:flex;flex-direction:column;gap:8px}.p-switch-item{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border-soft);border-radius:11px;background:rgba(255,48,79,.06);cursor:pointer;text-align:left}
+.p-switch-item:hover{border-color:var(--brand-red)}.p-switch-item img{width:35px;height:35px;border-radius:50%;object-fit:cover}
+.channel-details{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:18px 2px}.channel-title-text{font-size:clamp(1.1rem,2vw,1.5rem);font-weight:800}
+.channel-metrics{display:flex;flex-wrap:wrap;gap:12px;color:var(--text-muted);font-size:.77rem;margin-top:6px}
+.data-monitor-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:6px}
+.data-stat-box{padding:11px;border:1px solid var(--border-soft);background:var(--bg-card);border-radius:12px;min-width:0}
+.data-stat-box small{display:block;color:var(--text-muted);font-size:.68rem}.data-stat-box span{font-size:.9rem;font-weight:800;color:var(--cls-lightblue);overflow-wrap:anywhere}
+.player-utilities{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.utility-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-surface);cursor:pointer;font-size:.78rem;font-weight:700}
+.utility-btn:hover{border-color:var(--brand-red)}.fast-loader{position:absolute;inset:0;z-index:5;background:rgba(4,2,3,.86);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.fast-loader.active{opacity:1;pointer-events:auto}.spinner-ring{width:42px;height:42px;border:4px solid rgba(255,30,60,.2);border-top-color:var(--brand-red);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}.loader-text{color:#ff6578;font-size:.8rem;font-weight:800}
+.sidebar-stack{display:flex;flex-direction:column;gap:15px;min-width:0}.widget{padding:17px}.widget-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:1rem;font-weight:800;margin-bottom:13px}
+.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.category-card{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-surface);cursor:pointer;text-align:left;font-size:.78rem;font-weight:700}
+.category-card i{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;color:var(--brand-red);background:rgba(255,48,79,.1)}
+.category-card.active,.category-card:hover{border-color:var(--brand-red);background:rgba(255,48,79,.08)}
+.iptv-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.iptv-stat-card{padding:10px 7px;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-surface);text-align:center}
+.iptv-stat-card i{color:var(--brand-red);font-size:1rem}.iptv-stat-card small{display:block;font-size:.65rem;color:var(--text-muted);margin-top:5px}.iptv-stat-card strong{display:block;font-size:.86rem;margin-top:2px}
+.notice{padding:11px 12px;border-radius:11px;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.18);font-size:.77rem;color:var(--text-muted);line-height:1.6}
+.status-line{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text-muted)}.status-dot{width:8px;height:8px;border-radius:50%;background:var(--cls-green);box-shadow:0 0 10px rgba(0,255,102,.6)}
+.channels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:13px}
+.channel-card{position:relative;padding:16px 12px;text-align:center;border:1px solid var(--border-soft);border-radius:16px;background:var(--bg-card);cursor:pointer;transition:transform .2s,border-color .2s;min-width:0}
+.channel-card:hover{transform:translateY(-3px);border-color:var(--brand-red);box-shadow:0 10px 24px rgba(255,30,60,.12)}.channel-card.selected{border-color:var(--brand-red);box-shadow:0 0 0 1px var(--brand-red)}
+.channel-card img{width:66px;height:66px;border-radius:50%;object-fit:cover;background:var(--bg-surface);border:2px solid rgba(255,48,79,.25);margin:0 auto 10px;display:block}
+.channel-card h3{font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.channel-card p{font-size:.7rem;color:var(--text-muted);margin-top:4px}
+.fav-star{position:absolute;top:9px;left:10px;border:0;background:transparent;color:#85747b;cursor:pointer;padding:4px}.fav-star.active{color:var(--cls-yellow)}
+.channel-admin-delete{position:absolute;top:9px;right:9px;display:none;border:0;background:#b5092b;color:#fff;border-radius:50%;width:27px;height:27px;cursor:pointer}
+body.admin-mode .channel-admin-delete{display:grid;place-items:center}.empty-state{padding:25px;text-align:center;color:var(--text-muted);border:1px dashed var(--border-soft);border-radius:14px}
+.iptv-update-system{padding:17px}.update-list{display:grid;gap:9px}.update-item{padding:12px;border-radius:12px;background:var(--bg-surface);border:1px solid var(--border-soft)}
+.update-item strong{display:block;font-size:.85rem}.update-item small{color:var(--text-muted);font-size:.72rem}.update-item p{font-size:.78rem;color:var(--text-muted);margin-top:6px;line-height:1.6}
+.support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.ai-console{display:flex;flex-direction:column;gap:11px}
+.ai-output{min-height:135px;max-height:270px;overflow:auto;padding:13px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid var(--border-soft);font-size:.82rem;line-height:1.65;white-space:pre-wrap}
+.command-row{display:flex;gap:8px}.command-row input{flex:1;min-width:0}.quick-commands{display:flex;flex-wrap:wrap;gap:7px}
+.quick-command{font-size:.72rem;padding:7px 9px;border-radius:9px;border:1px solid var(--border-soft);background:var(--bg-surface);cursor:pointer}.quick-command:hover{border-color:var(--brand-red)}
+.report-list{display:grid;gap:10px;margin-top:12px}.report-card{padding:13px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-surface)}
+.report-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.report-card h3{font-size:.85rem}.report-card p{font-size:.78rem;color:var(--text-muted);line-height:1.6;margin-top:7px;overflow-wrap:anywhere}
+.report-status{display:inline-block;border:1px solid var(--border-soft);border-radius:999px;padding:4px 8px;font-size:.67rem;font-weight:800}
+.report-reply{margin-top:10px;padding:10px;border-left:3px solid var(--brand-red);background:rgba(255,48,79,.07);border-radius:0 8px 8px 0;font-size:.78rem}
+.admin-panel{padding:17px;border:1px solid rgba(255,48,79,.3);border-radius:18px;background:var(--bg-card)}.admin-tools{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.admin-ticket{padding:13px;border:1px solid var(--border-soft);border-radius:12px;margin-top:10px;background:var(--bg-surface)}
+.admin-ticket textarea{margin-top:8px}.admin-ticket .ticket-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.privacy-note{font-size:.72rem;color:var(--text-muted);line-height:1.6}.modal-backdrop{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(12px)}
+.modal-backdrop.open{display:flex}.modal{width:min(100%,560px);max-height:90vh;overflow:auto;padding:22px;position:relative;background:var(--bg-elevated);border:1px solid rgba(255,48,79,.35);border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.modal-close{position:absolute;top:14px;right:14px}.toast-stack{position:fixed;right:15px;bottom:15px;z-index:3000;display:grid;gap:8px;width:min(360px,calc(100% - 30px))}
+.toast{padding:12px 14px;border-radius:12px;background:#1d1015;color:#fff;border:1px solid rgba(255,48,79,.4);box-shadow:0 12px 30px rgba(0,0,0,.3);font-size:.82rem;animation:toastIn .2s ease}
+.toast.ok{border-color:rgba(0,255,102,.35)}.toast.error{border-color:rgba(255,80,80,.6)}@keyframes toastIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.site-footer{border-top:1px solid var(--border-soft);padding:24px 0 34px;color:var(--text-muted);font-size:.76rem}.footer-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.footer-links{display:flex;gap:14px;flex-wrap:wrap}.footer-links button{border:0;background:none;color:var(--text-muted);cursor:pointer}.footer-links button:hover{color:var(--brand-red)}
+@media(max-width:1050px){.layout-grid{grid-template-columns:minmax(0,1.4fr) minmax(270px,1fr);gap:15px}.header-inner{gap:12px}.brand{font-size:1rem}.header-search{max-width:420px}}
+@media(max-width:800px){:root{--header-height:70px}.header-inner{width:94%;gap:9px}.brand{font-size:.92rem;gap:7px}.brand-mark{width:35px;height:35px}.header-search{max-width:none}.header-search input{padding:10px 10px 10px 35px;font-size:.8rem}.header-search i{left:12px}.header-actions .desktop-action{display:none}.layout-grid{grid-template-columns:1fr}.sidebar-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.support-grid{grid-template-columns:1fr}.release-banner{align-items:flex-start}.release-actions{flex-direction:column}}
+@media(max-width:540px){.container{width:93%}.header-inner{gap:7px}.brand-name{max-width:100px;white-space:normal;line-height:1.1}.header-search{flex:1}.header-search input{width:100%}.header-actions{gap:5px}.icon-btn{width:37px;height:37px;border-radius:11px}
+.release-banner{padding:14px;gap:10px}.release-left{align-items:flex-start;gap:10px}.release-icon{flex-basis:39px;height:39px;border-radius:12px}.release-banner p{font-size:.72rem}.release-actions .btn{padding:9px;font-size:.72rem}
+.layout-grid{margin-top:15px}.screen-wrapper{border-radius:15px}.channel-details{align-items:flex-start;padding:13px 2px}.data-monitor-bar{gap:6px}.data-stat-box{padding:8px 6px}.data-stat-box small{font-size:.6rem}.data-stat-box span{font-size:.75rem}
+.sidebar-stack{grid-template-columns:1fr}.channels-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.channel-card{padding:14px 8px}.channel-card img{width:57px;height:57px}.form-row{grid-template-columns:1fr;gap:0}.command-row{flex-direction:column}.footer-inner{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* IPTV playlist import + large-library performance */
+#playlistImportSection .field[type="file"]{padding:10px}
+#playlistImportSection{display:none}body.admin-mode #playlistImportSection{display:block}
+#addStreamBtn{display:none}body.admin-mode #addStreamBtn{display:inline-flex}
+#playlistImportSection .button-row .btn{min-height:42px}
+#playlistStatus{overflow-wrap:anywhere}
+ .playlist-load-monitor{margin-top:12px;padding:13px;border:1px solid #dbe3ec;border-radius:13px;background:#f8fafc;color:#142033}
+.playlist-monitor-top{display:flex;justify-content:space-between;gap:12px;font-size:.82rem;margin-bottom:8px}
+.playlist-progress-track{height:9px;border-radius:20px;background:#e2e8f0;overflow:hidden}
+.playlist-progress-bar{height:100%;width:0;background:linear-gradient(90deg,#16a34a,#2563eb);border-radius:20px;transition:width .15s}
+.playlist-monitor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:11px}
+.playlist-monitor-grid>div{padding:8px;border-radius:9px;background:#fff;border:1px solid #e2e8f0;min-width:0}
+.playlist-monitor-grid small{display:block;color:#64748b;font-size:.65rem}
+.playlist-monitor-grid b{display:block;font-size:.82rem;overflow-wrap:anywhere;margin-top:3px}
+.playlist-route{font-size:.7rem;color:#64748b;margin-top:10px;line-height:1.5}
+@media(max-width:540px){.playlist-monitor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#loadMoreChannels:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:560px){#playlistImportSection .button-row .btn{width:100%}}
+
+
+/* STREAMX playback loading + resilient channel logos */
+.player-stage{position:relative}
+#playerShell{position:relative}
+/* STREAMX direct playback: no forced interstitial */
+#sxAdGate{display:none!important}
+#streamxPlaybackLoader{display:none;position:absolute;inset:0;z-index:12;background:rgba(5,7,12,.86);align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#fff;text-align:center;padding:20px}
+#streamxPlaybackLoader.active{display:flex;animation:sxFadeIn .18s ease-out}
+#streamxPlaybackLoader .sx-spinner{width:46px;height:46px;border:4px solid rgba(255,255,255,.22);border-top-color:#ff4d55;border-right-color:#ffb45b;border-radius:50%;animation:sxSpin .8s linear infinite}
+#streamxPlaybackLoader .sx-loading-title{font-weight:800;letter-spacing:.08em}
+#streamxPlaybackLoader .sx-loading-sub{font-size:12px;opacity:.8;max-width:270px}
+@keyframes sxSpin{to{transform:rotate(360deg)}}@keyframes sxFadeIn{from{opacity:0}to{opacity:1}}
+.channel-card img{object-fit:contain;background:rgba(255,255,255,.06)}
+.channel-card .sx-logo-fallback{width:58px;height:58px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#ff344e,#ffad4b);color:#fff;font-weight:900;font-size:21px}
+.channel-card.loading{opacity:.72;animation:sxPulse 1.15s ease-in-out infinite alternate}
+@keyframes sxPulse{from{filter:saturate(.75);transform:translateY(0)}to{filter:saturate(1.1);transform:translateY(-2px)}}
+.channel-card.selected{outline:2px solid #ff6a4d;outline-offset:2px}
+
+
+/* STREAMX 16 DEC 2026 — clean white Cricfy-inspired UI */
+:root{color-scheme:light;--bg-main:#fff;--bg-card:#fff;--bg-surface:#f8fafc;--bg-elevated:#fff;--border-glow:#16a34a;--border-soft:#dbe3ec;--text-main:#142033;--text-muted:#64748b;--brand-red:#e44735;--brand-cherry:#dc2626;--accent-gradient:linear-gradient(135deg,#16a34a,#2563eb);--shadow-glow:rgba(37,99,235,.12);--cls-red:#dc2626;--cls-orange:#f97316;--cls-yellow:#eab308;--cls-green:#16a34a;--cls-lightblue:#2563eb;--cls-blue:#2563eb;--iptv-border:#dbe3ec;--iptv-border-focus:#2563eb}
+body{background:#fff;background-image:none;color:#142033}
+.site-header{background:rgba(255,255,255,.97);border-bottom:1px solid #e2e8f0;backdrop-filter:none}
+.release-banner{background:#f8fafc;border-color:#dbe3ec}
+.card,.widget,.channel-card,.update-item,.data-stat-box{box-shadow:none;background:#fff;border-color:#dbe3ec}
+.channel-card{border:1.5px solid #e44735;border-radius:18px;transition:none;padding:15px 10px}
+.channel-card:hover{transform:none;box-shadow:none;border-color:#2563eb}
+.channel-card img{width:76px;height:76px;border-radius:50%;background:#fff;border:2px solid #e2e8f0;object-fit:contain}
+.category-card{background:#fff;border-color:#dbe3ec}.category-card.active{background:#eff6ff;border-color:#2563eb}
+.btn-primary,.brand-mark{background:linear-gradient(135deg,#16a34a,#2563eb)}
+.player-sidebar-overlay{background:#fff;color:#142033;border-left:1px solid #dbe3ec}
+.p-switch-item{background:#f8fafc;color:#142033}
+#streamxPlaybackLoader{background:rgba(255,255,255,.94);color:#142033}
+#streamxPlaybackLoader .sx-spinner{border-color:#dbeafe;border-top-color:#16a34a;border-right-color:#2563eb}
+#streamxPlaybackLoader .sx-loading-title{color:#142033}
+.player-menu-trigger{background:#fff;color:#142033;border-color:#2563eb}
+#mainVideo{background:#080b12}
+.sx-country-wrap{margin:0 0 16px}.sx-country-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.sx-country-btn{display:flex;align-items:center;gap:10px;padding:11px;border:1.5px solid #e44735;border-radius:14px;background:#fff;color:#142033;font-weight:700;cursor:pointer}.sx-country-btn.active{border-color:#2563eb;background:#eff6ff}.sx-country-btn .flag{font-size:24px}.sx-device-gate{position:fixed;inset:0;z-index:5000;background:rgba(15,23,42,.78);display:grid;place-items:center;padding:18px}.sx-device-card{width:min(560px,100%);padding:25px;background:#fff;color:#142033;border-radius:22px;box-shadow:0 20px 80px #0005}.sx-device-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.sx-device-choice{padding:22px 12px;border:2px solid #dbe3ec;border-radius:16px;background:#fff;color:#142033;font-weight:800;cursor:pointer}.sx-device-choice i{display:block;font-size:32px;margin-bottom:10px;color:#2563eb}.sx-device-choice:hover{border-color:#16a34a}.sx-device-note{font-size:12px;color:#64748b;margin-top:14px;line-height:1.6}.sx-mode-pill{display:inline-flex;padding:5px 9px;border-radius:30px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:800}
+body.sx-tv-mode{--header-height:88px}body.sx-tv-mode .container{width:min(96%,1800px)}body.sx-tv-mode .brand{font-size:1.45rem}body.sx-tv-mode .channel-card{padding:22px 14px}body.sx-tv-mode .channel-card img{width:100px;height:100px}body.sx-tv-mode .channel-card h3{font-size:1.05rem}body.sx-tv-mode .channels-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}body.sx-tv-mode button,body.sx-tv-mode input{min-height:48px}body.sx-tv-mode .layout-grid{grid-template-columns:minmax(0,2fr) minmax(340px,1fr)}
+@media(max-width:760px){.sx-country-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sx-device-card{padding:19px}.sx-device-options{gap:8px}.sx-device-choice{padding:18px 8px}}
+@media(prefers-reduced-motion:reduce){.channel-card,.sx-device-choice{transition:none!important}}
+
+
+
+/* Update 2026: featured shelf is public; management controls remain admin-only */
+.sx-admin-fav-controls{display:none!important}body.admin-mode .sx-admin-fav-controls{display:flex!important;gap:8px;flex-wrap:wrap}
+.sx-admin-fav-shelf[hidden]{display:none!important}
+
+/* STREAMX visual polish: vivid but balanced channel identity colours */
+.channel-card{position:relative;overflow:hidden;border:1.5px solid #dbe3ec!important;border-radius:21px!important;background:linear-gradient(160deg,#fff 0%,#f8fbff 100%)!important;padding:17px 12px!important;box-shadow:0 7px 20px rgba(15,23,42,.055)!important;transition:border-color .18s,box-shadow .18s!important}
+.channel-card:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--card-accent,#2563eb)}
+.channel-card:nth-child(6n+1){--card-accent:#16a34a}.channel-card:nth-child(6n+2){--card-accent:#2563eb}.channel-card:nth-child(6n+3){--card-accent:#e44735}.channel-card:nth-child(6n+4){--card-accent:#9333ea}.channel-card:nth-child(6n+5){--card-accent:#ea8a12}.channel-card:nth-child(6n){--card-accent:#0891b2}
+.channel-card:hover,.channel-card:focus-within{border-color:var(--card-accent)!important;box-shadow:0 10px 25px rgba(15,23,42,.10)!important}
+.channel-card img{width:82px!important;height:82px!important;padding:4px;border:3px solid var(--card-accent,#2563eb)!important;box-shadow:0 4px 12px rgba(15,23,42,.09)}
+.channel-card h3{font-weight:800;letter-spacing:.1px;color:#142033;margin-top:10px}.channel-card p{display:inline-flex;margin-top:6px;padding:4px 9px;border-radius:30px;background:#f1f5f9;color:#475569;font-size:.7rem;font-weight:700}
+.category-card{border-radius:14px!important;font-weight:750!important;transition:background .15s,border-color .15s!important}.category-card:nth-child(6n+1){--cat:#16a34a}.category-card:nth-child(6n+2){--cat:#2563eb}.category-card:nth-child(6n+3){--cat:#e44735}.category-card:nth-child(6n+4){--cat:#9333ea}.category-card:nth-child(6n+5){--cat:#ea8a12}.category-card:nth-child(6n){--cat:#0891b2}.category-card i{color:var(--cat,#2563eb)}
+.sx-country-btn{border-color:#dbe3ec!important;box-shadow:0 4px 12px rgba(15,23,42,.035);transition:border-color .15s,background .15s!important}.sx-country-btn:nth-child(6n+1){border-left:4px solid #16a34a!important}.sx-country-btn:nth-child(6n+2){border-left:4px solid #2563eb!important}.sx-country-btn:nth-child(6n+3){border-left:4px solid #e44735!important}.sx-country-btn:nth-child(6n+4){border-left:4px solid #9333ea!important}.sx-country-btn:nth-child(6n+5){border-left:4px solid #ea8a12!important}.sx-country-btn:nth-child(6n){border-left:4px solid #0891b2!important}
+.channels-grid{gap:14px!important}.section-heading h2:before{background:linear-gradient(180deg,#16a34a,#2563eb,#e44735)!important;box-shadow:none!important}
+@media(max-width:600px){.channel-card{padding:14px 8px!important;border-radius:17px!important}.channel-card img{width:68px!important;height:68px!important}.channels-grid{gap:10px!important}}
+
+
+/* STREAMX AUTOLOAD + ADMIN FAVOURITES polish */
+.channels-grid{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:15px}
+.channel-card{padding:17px 12px 15px;border:1px solid #dfe7ef;background:linear-gradient(160deg,#fff 0%,#f8fbff 100%);box-shadow:0 7px 20px rgba(15,35,65,.055);border-radius:20px}
+.channel-card:nth-child(6n+1){border-bottom:3px solid #19a96b}
+.channel-card:nth-child(6n+2){border-bottom:3px solid #2785e8}
+.channel-card:nth-child(6n+3){border-bottom:3px solid #e44c4c}
+.channel-card:nth-child(6n+4){border-bottom:3px solid #8b5bd6}
+.channel-card:nth-child(6n+5){border-bottom:3px solid #e69a27}
+.channel-card:nth-child(6n){border-bottom:3px solid #16a6b5}
+.channel-card img{width:76px;height:76px;border:3px solid #e8eef5;background:#fff;box-shadow:0 4px 12px rgba(20,40,70,.09)}
+.channel-card h3{color:#152238;font-size:.9rem;font-weight:800}
+.channel-card p{color:#64748b}
+.channel-card:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(30,80,130,.11)}
+.sx-admin-fav-shelf{background:linear-gradient(135deg,#f7fbff,#fff);border:1px solid #dce6f0;border-radius:22px}
+.sx-admin-fav-shelf .sx-country-btn{background:#fff;border-color:#dce6f0;color:#17243a}
+.sx-admin-fav-shelf .sx-country-btn:hover{border-color:#20a56b}
+.sx-admin-fav-controls{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.sx-admin-fav-controls select{max-width:360px}
+.sx-admin-fav-remove{margin-left:auto;border:0;background:#fff0f0;color:#c33;border-radius:9px;padding:5px 9px;cursor:pointer}
+.sx-admin-fav-shelf[hidden]{display:none!important}
+@media(max-width:520px){.channels-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.channel-card{padding:14px 8px}.channel-card img{width:66px;height:66px}}
+@media(prefers-reduced-motion:reduce){.channel-card,.channel-card:hover{transition:none;transform:none}}
+
+.sx-firebase-signal{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#fff1f2;color:#b42336;font-size:12px;font-weight:800;border:1px solid #fecdd3}.sx-firebase-signal .dot{width:9px;height:9px;border-radius:50%;background:#dc2626;box-shadow:0 0 0 3px #fee2e2}
+.sx-playback-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid var(--border-soft);border-radius:13px;background:var(--bg-surface)}.sx-playback-controls button{min-height:38px}.sx-lottery-result{font-size:.8rem;font-weight:700;color:var(--text-muted)}.sx-playback-controls button:disabled{opacity:.45;cursor:not-allowed}
+
+/* STREAMX cross-platform feature pack */
+.sx-feature-hub{margin-top:14px;padding:15px;border:1px solid var(--border-soft);border-radius:16px;background:var(--bg-surface)}
+.sx-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.sx-feature-card{padding:12px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-card);min-width:0}
+.sx-feature-card h3{font-size:.92rem;margin-bottom:7px}
+.sx-feature-card p,.sx-feature-card small{font-size:.76rem;color:var(--text-muted);line-height:1.5}
+.sx-feature-card .field{margin:6px 0}
+.sx-feature-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.sx-feature-row .btn,.sx-feature-row button{min-height:36px}
+.sx-history-list,.sx-playlist-list{display:grid;gap:7px;margin-top:8px;max-height:210px;overflow:auto}
+.sx-history-item,.sx-playlist-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border:1px solid var(--border-soft);border-radius:9px;font-size:.78rem}
+.sx-network-meter{height:7px;background:var(--border-soft);border-radius:20px;overflow:hidden;margin:7px 0}
+.sx-network-meter span{display:block;height:100%;width:0;background:#16a34a;transition:width .2s}
+.sx-parental-lock{filter:blur(5px);pointer-events:none;user-select:none}
+.sx-tv-mode .channel-card:focus,.sx-tv-mode button:focus,.sx-tv-mode input:focus,.sx-tv-mode select:focus{outline:3px solid #16a34a;outline-offset:3px}
+.sx-tv-mode .sx-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:620px){.sx-feature-grid{grid-template-columns:1fr}}
+
+
+/* STREAMX update policy and three-platform mode */
+.sx-update-rules{margin:14px 0;padding:15px;border:1px solid var(--border-soft);border-radius:14px;background:var(--bg-surface)}
+.sx-update-rules h3{margin:0 0 8px;font-size:1rem}
+.sx-update-rules ul{padding-left:20px;margin:8px 0}
+.sx-update-rules li{margin:5px 0;font-size:.82rem;line-height:1.5}
+.sx-policy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sx-policy-grid .form-group{min-width:0}
+.sx-android-mode .channel-card:focus,.sx-web-mode .channel-card:focus{outline:2px solid #16a34a;outline-offset:2px}
+.sx-android-mode .sx-feature-card{touch-action:manipulation}
+.sx-web-mode .sx-feature-hub{max-width:1100px;margin-left:auto;margin-right:auto}
+@media(max-width:620px){.sx-policy-grid{grid-template-columns:1fr}}
+
+
+/* STREAMX mobile player visibility and click recovery */
+@media(max-width:800px){
+ .layout-grid{display:flex!important;flex-direction:column!important}
+ .player-column{order:0!important;width:100%;min-width:0}
+ .sidebar-stack{order:1!important;width:100%}
+ #screenWrapper{position:relative;display:block;width:100%;min-height:220px;aspect-ratio:16/9;scroll-margin-top:84px;z-index:1}
+ #mainVideo,#embedFrame{position:relative;z-index:1;width:100%;height:100%;min-height:220px}
+ #streamxPlaybackLoader{z-index:5}
+ #sxAdGate{display:none!important;pointer-events:none!important}
+}
+.channel-card{cursor:pointer;touch-action:manipulation}
+.channel-card:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+
+
+/* Final mobile stacking fix: sidebar/categories must never cover the video player */
+.layout-grid{align-items:start}
+.player-column{position:relative;z-index:20;min-width:0}
+.screen-wrapper{position:relative;z-index:21;isolation:isolate;overflow:hidden;background:#000;min-height:180px}
+#mainVideo,#embedFrame{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:1!important;background:#000!important}
+#streamxPlaybackLoader{position:absolute;inset:0;z-index:8}
+.player-overlay{z-index:9}
+.player-sidebar-overlay{z-index:12}
+.sidebar-stack{position:relative!important;z-index:1!important;min-width:0}
+.sidebar-stack>.widget{position:relative!important;inset:auto!important;transform:none!important;max-width:100%}
+@media(max-width:800px){
+ .layout-grid{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:14px!important}
+ .player-column{order:0!important;width:100%!important;z-index:20!important}
+ .sidebar-stack{order:1!important;display:flex!important;flex-direction:column!important;width:100%!important;z-index:1!important}
+ .screen-wrapper{width:100%!important;aspect-ratio:16/9!important;min-height:190px!important;scroll-margin-top:80px}
+ .sidebar-stack .widget{width:100%!important}
+}
+@media(max-width:540px){
+ .screen-wrapper{aspect-ratio:16/9!important;min-height:190px!important;border-radius:14px}
+}
+
+#sxCategoriesWidget.sx-collapsed #categoryGrid{display:none!important}@media(min-width:801px){#sxCategoriesWidget #categoryGrid{display:grid!important}}
+</style>
+</head>
+<body>
+<div class="sx-device-gate" id="sxDeviceGate" role="dialog" aria-modal="true" aria-label="Choose device mode"><div class="sx-device-card"><div style="font-size:12px;font-weight:800;color:#16a34a;letter-spacing:2px">STREAMX LIVE TV</div><h2 style="font-size:25px;margin-top:8px">আপনার ডিভাইস বেছে নিন</h2><p style="color:#64748b;margin-top:6px">Choose the layout that fits your screen.</p><div class="sx-device-options"><button class="sx-device-choice" data-sx-mode="mobile"><i class="fa-solid fa-mobile-screen-button"></i>Mobile</button><button class="sx-device-choice" data-sx-mode="tv"><i class="fa-solid fa-tv"></i>Smart TV</button></div><p class="sx-device-note">TV mode বড় স্ক্রিন ও রিমোট ব্যবহারের জন্য। Mobile mode ছোট স্ক্রিন ও কম রিসোর্সের জন্য। পরে Settings থেকে বদলানো যাবে।</p></div></div>
+<header class="site-header">
+ <div class="header-inner">
+  <a class="brand" href="#" aria-label="STREAMX home"><span class="brand-mark"><i class="fa-solid fa-play"></i></span><span class="brand-name">STREAMX</span></a>
+  <label class="header-search"><span class="sr-only">Search channels</span><i class="fa-solid fa-magnifying-glass"></i><input id="channelSearch" type="search" placeholder="চ্যানেল খুঁজুন..." autocomplete="off"></label>
+  <div class="header-actions">
+   <span class="sx-firebase-signal" id="firebaseSignal" title="Firebase is not configured"><span class="dot"></span><span id="firebaseSignalText">Firebase সংযুক্ত নয়</span></span>
+   <button class="icon-btn desktop-action" id="openReportTop" title="Report a problem" aria-label="Report a problem"><i class="fa-regular fa-flag"></i></button>
+   <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
+   <button class="icon-btn" id="adminOpenBtn" title="Admin sign-in" aria-label="Admin sign-in"><i class="fa-solid fa-shield-halved"></i></button>
+  </div>
+ </div>
+</header>
+
+
+
+<main>
+ <section class="container release-banner" id="releaseBanner" aria-labelledby="releaseTitle">
+  <div class="release-left"><div class="release-icon"><i class="fa-solid fa-bolt"></i></div><div>
+   <h1 id="releaseTitle">STREAMX • 16 December 2026 Update Center</h1>
+   <p id="releaseSummary">STREAMX 1.1.0 preview — TV remote navigation, local multi-playlists, XMLTV EPG import, watch history, parental UI lock and network monitor. Not a published store release.</p>
+   <div class="release-meta"><span class="pill warning" id="releaseVersion">Version 1.1.0 • Preview Feature Pack</span><span class="pill" id="releaseDate">Preview build • 24 Nov 2026</span><span class="pill success">Future roadmap included</span></div>
+  </div></div>
+  <div class="release-actions"><button class="btn btn-primary" id="viewUpdates"><i class="fa-solid fa-list-check"></i> Update notes</button><button class="btn btn-quiet" id="dismissBanner" aria-label="Hide banner"><i class="fa-solid fa-xmark"></i></button></div>
+ </section>
+
+ <div class="container layout-grid">
+  <section class="player-column" aria-label="Media player">
+   <div class="screen-wrapper" id="screenWrapper">
+     <div id="sxAdGate" hidden aria-hidden="true"></div>
+<div id="streamxPlaybackLoader" aria-live="polite" role="status"><div class="sx-spinner"></div><div class="sx-loading-title">LOADING CHANNEL</div><div class="sx-loading-sub" id="sxLoadingMessage">Connecting to authorized stream…</div></div>
+    <video id="mainVideo" controls playsinline preload="none" poster="" aria-label="STREAMX media player"></video>
+    <iframe id="embedFrame" title="Authorized external player" referrerpolicy="no-referrer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+    <div class="player-overlay"><span class="player-chip" id="playerStatus">READY • SELECT A CHANNEL</span><div class="player-tools">
+     <button id="muteBtn" title="Mute/unmute" aria-label="Mute or unmute"><i class="fa-solid fa-volume-high"></i></button>
+     <button id="fullscreenBtn" title="Fullscreen" aria-label="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+    </div></div>
+    <button class="player-menu-trigger" id="playerMenuBtn" aria-label="Open channel list" title="Channel list"><i class="fa-solid fa-bars"></i></button>
+    <div class="player-sidebar-overlay" id="playerSidebar" aria-label="Quick channel list">
+     <div class="player-sidebar-header"><strong>Quick channels</strong><button class="icon-btn" id="closePlayerSidebar" aria-label="Close channel list"><i class="fa-solid fa-xmark"></i></button></div>
+     <div class="player-channel-list" id="quickChannelList"></div>
+    </div>
+    <div class="fast-loader" id="fastLoader"><div class="spinner-ring"></div><div class="loader-text" id="loaderText">Preparing player…</div></div>
+   </div>
+   <div class="sx-playback-controls" aria-label="Playback controls">
+    <button type="button" class="utility-btn" data-seek-back="5">−5s</button>
+    <button type="button" class="utility-btn" data-seek-back="10">−10s</button>
+    <button type="button" class="utility-btn" data-seek-back="15">−15s</button>
+    <button type="button" class="utility-btn" id="sxLotteryBtn">🎲 Auto Lottery</button>
+    <span class="sx-lottery-result" id="sxLotteryResult" aria-live="polite">Lottery: not drawn</span>
+    <button type="button" class="utility-btn" id="sxPrizeSkipBtn" disabled>Skip +0s</button>
+   </div>
+   <div class="channel-details"><div><div class="channel-title-text" id="currentChannelTitle">Welcome to STREAMX</div><div class="channel-metrics"><span><i class="fa-solid fa-signal"></i> <span id="currentCategory">Media dashboard</span></span><span><i class="fa-regular fa-clock"></i> <span id="playerHint">Choose a valid stream URL</span></span></div></div><span class="pill live" id="liveBadge">DEMO</span></div>
+   <div class="data-monitor-bar">
+    <div class="data-stat-box"><small>PLAYER STATUS</small><span id="statPlayer">Standby</span></div>
+    <div class="data-stat-box"><small>CHANNELS</small><span id="statChannels">0</span></div>
+    <div class="data-stat-box"><small>FAVOURITES</small><span id="statFavourites">0</span></div>
+   </div>
+   <div class="player-utilities">
+    <button class="utility-btn" id="favoriteCurrent"><i class="fa-regular fa-star"></i> Favourite</button>
+    <button class="utility-btn" id="addStreamBtn"><i class="fa-solid fa-link"></i> Add authorized stream</button>
+    <button class="utility-btn" id="copyDiagnostics"><i class="fa-regular fa-copy"></i> Copy diagnostics</button>
+    <button class="utility-btn" id="openReportPlayer"><i class="fa-regular fa-flag"></i> Report a problem</button>
+   </div>
+   <div class="notice" style="margin-top:13px"><i class="fa-solid fa-circle-info"></i> Demo template: no TV channels are bundled. Add streams that you own or are authorized to distribute. Browser support, CORS and provider restrictions may affect playback.</div>
+
+   <section class="sx-feature-hub" id="sxFeatureHub" aria-label="STREAMX platform features">
+    <div class="section-heading"><div><h2><i class="fa-solid fa-layer-group"></i> STREAMX TV + Mobile + Web</h2><p>Remote controls, EPG, playlists, favourites, history, parental settings and network diagnostics.</p></div><span class="pill success">Feature Pack</span></div>
+    <div class="sx-feature-grid">
+     <div class="sx-feature-card">
+      <h3><i class="fa-solid fa-gamepad"></i> TV Remote Support</h3>
+      <p>Arrow / Enter / Back / Escape, plus channel up/down keys. Select a channel card and press Enter.</p>
+      <div class="sx-feature-row"><button class="btn" id="sxTvModeToggle" type="button">Switch TV / Mobile</button><button class="btn" id="sxRemoteHelp" type="button">Remote keys</button></div>
+     </div>
+     <div class="sx-feature-card">
+      <h3><i class="fa-solid fa-calendar-days"></i> Live TV + EPG</h3>
+      <p id="sxEpgNow">No programme guide loaded.</p><p id="sxEpgNext"></p>
+      <label class="field-label" for="sxEpgFile">Import your XMLTV guide</label><input class="field" id="sxEpgFile" type="file" accept=".xml,.xmltv,.gz">
+      <div class="sx-feature-row"><button class="btn" id="sxEpgImport" type="button">Load EPG file</button></div>
+      <small>EPG matching uses channel names/IDs when available. Compressed .gz files need to be uncompressed first.</small>
+     </div>
+     <div class="sx-feature-card">
+      <h3><i class="fa-solid fa-list"></i> Multiple Playlists</h3>
+      <p>Keep multiple authorized M3U files on this device and activate one at a time.</p>
+      <input class="field" id="sxMultiPlaylistFile" type="file" accept=".m3u,.m3u8,.txt">
+      <input class="field" id="sxMultiPlaylistName" maxlength="80" placeholder="Playlist name (optional)">
+      <div class="sx-feature-row"><button class="btn btn-primary" id="sxAddMultiPlaylist" type="button">Add playlist</button></div>
+      <div class="sx-playlist-list" id="sxMultiPlaylistList"></div>
+     </div>
+     <div class="sx-feature-card">
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Watch History</h3>
+      <p>Recently selected channels on this browser.</p><div class="sx-history-list" id="sxWatchHistory"></div>
+      <div class="sx-feature-row"><button class="btn" id="sxClearHistory" type="button">Clear history</button></div>
+     </div>
+     <div class="sx-feature-card">
+      <h3><i class="fa-solid fa-shield-halved"></i> Parental Control</h3>
+      <p id="sxParentalStatus">Parental lock is off.</p>
+      <div class="sx-feature-row"><button class="btn" id="sxSetParentalPin" type="button">Set / change PIN</button><button class="btn" id="sxLockChannels" type="button">Lock channels</button><button class="btn" id="sxUnlockChannels" type="button">Unlock</button></div>
+      <small>Local UI lock only. It is not secure content protection and can be bypassed by clearing browser data or developer tools.</small>
+     </div>
+     <div class="sx-feature-card">
+      <h3><i class="fa-solid fa-gauge-high"></i> Network Monitor</h3>
+      <p id="sxNetworkState">Checking connection…</p><div class="sx-network-meter"><span id="sxNetworkMeter"></span></div>
+      <small id="sxNetworkDetails">Network API availability varies by browser and device.</small>
+      <div class="sx-feature-row"><button class="btn" id="sxNetworkRefresh" type="button">Refresh status</button></div>
+     </div>
+    </div>
+   </section>
+
+  </section>
+
+  <aside class="sidebar-stack">
+   <section class="widget card" id="sxCategoriesWidget"><div class="widget-title"><span><i class="fa-solid fa-layer-group"></i> Categories</span><button class="btn" type="button" id="sxCategoryToggle" aria-expanded="false">Filter</button></div>
+    <div class="category-grid" id="categoryGrid">
+     <button class="category-card active" data-category="All"><i class="fa-solid fa-border-all"></i> All</button>
+     <button class="category-card" data-category="News"><i class="fa-solid fa-newspaper"></i> News</button>
+     <button class="category-card" data-category="Sports"><i class="fa-solid fa-futbol"></i> Sports</button>
+     <button class="category-card" data-category="Basketball"><i class="fa-solid fa-basketball"></i> Basketball</button>
+     <button class="category-card" data-category="Entertainment"><i class="fa-solid fa-film"></i> Entertainment</button>
+     <button class="category-card" data-category="Education"><i class="fa-solid fa-graduation-cap"></i> Education</button>
+     <button class="category-card" data-category="Other"><i class="fa-solid fa-tv"></i> Other</button>
+    </div>
+   </section>
+   <section class="widget card"><div class="widget-title"><span><i class="fa-solid fa-gauge-high"></i> System overview</span></div>
+    <div class="iptv-stats-grid">
+     <div class="iptv-stat-card"><i class="fa-solid fa-tv"></i><small>Channels</small><strong id="overviewChannels">0</strong></div>
+     <div class="iptv-stat-card"><i class="fa-solid fa-star"></i><small>Saved</small><strong id="overviewSaved">0</strong></div>
+     <div class="iptv-stat-card"><i class="fa-solid fa-code-branch"></i><small>Build</small><strong>2026</strong></div>
+    </div><hr><div class="status-line"><span class="status-dot"></span><span id="networkStatus">Checking browser connection…</span></div>
+   </section>
+   <section class="widget card"><div class="widget-title"><span><i class="fa-solid fa-wand-magic-sparkles"></i> Quick help</span></div>
+    <p class="muted small" style="line-height:1.7;margin-bottom:12px">AI Help Command, user bug reports and admin reply demo. Cloud AI and cross-device tickets need a secure backend.</p>
+    <button class="btn btn-primary" style="width:100%" id="jumpSupport"><i class="fa-solid fa-headset"></i> Open Support Center</button>
+   </section>
+   <section class="widget card"><div class="widget-title"><span><i class="fa-solid fa-shield-halved"></i> Privacy notice</span></div><p class="privacy-note">এই preview-তে report স্থানীয় browser storage-এ থাকে। অন্য device-এ দেখা যায় না। Production-এ Firebase Authentication এবং সঠিক server-side Security Rules লাগবে।</p></section>
+  </aside>
+ </div>
+
+
+ <section class="container section card" id="playlistImportSection">
+  <div class="section-heading"><div><h2><i class="fa-solid fa-list"></i> IPTV Playlist Loader</h2><p>Import an authorized channel-list M3U file/URL. Each channel must contain a real playable stream URL (often an HLS .m3u8 manifest). Loads the full imported list in one view.</p></div><span class="pill live">M3U READY</span></div>
+  <div class="form-row">
+   <div class="form-group"><label class="field-label" for="playlistUrl">IPTV playlist URL (.m3u / .m3u8)</label><input class="field" id="playlistUrl" type="url" placeholder="https://your-authorized-provider.example/playlist.m3u" autocomplete="url"></div>
+   <div class="form-group"><label class="field-label" for="playlistFile">Or choose playlist file</label><input class="field" id="playlistFile" type="file" accept=".m3u,.m3u8,.txt,audio/x-mpegurl,application/vnd.apple.mpegurl"></div>
+  </div>
+  <div class="button-row" style="display:flex;flex-wrap:wrap;gap:9px;margin-top:10px">
+   <button class="btn btn-primary" id="loadPlaylistUrl"><i class="fa-solid fa-cloud-arrow-down"></i> Load playlist URL</button>
+   <button class="btn" id="loadPlaylistFile"><i class="fa-solid fa-file-import"></i> Import selected file</button>
+   <button class="btn" id="exportPlaylist"><i class="fa-solid fa-download"></i> Export channels as M3U</button>
+   <button class="btn" id="clearImportedPlaylist"><i class="fa-solid fa-trash"></i> Clear imported channels</button>
+  </div>
+  <div class="status-line" style="margin-top:13px"><span class="status-dot"></span><span id="playlistStatus" role="status" aria-live="polite">Ready. All imported channels appear together automatically; scroll and tap a channel.</span></div>
+  <div id="playlistLoadMonitor" class="playlist-load-monitor" aria-live="polite">
+   <div class="playlist-monitor-top"><strong id="playlistStage">লোডিং প্রস্তুত</strong><strong id="playlistPercent">0%</strong></div>
+   <div class="playlist-progress-track"><div id="playlistProgressBar" class="playlist-progress-bar"></div></div>
+   <div class="playlist-monitor-grid">
+    <div><small>মোট চ্যানেল</small><b id="plTotal">0</b></div>
+    <div><small>নতুন যোগ</small><b id="plAdded">0</b></div>
+    <div><small>ডুপ্লিকেট</small><b id="plDuplicates">0</b></div>
+    <div><small>ডাউনলোড</small><b id="plBytes">0 B</b></div>
+    <div><small>সময়</small><b id="plElapsed">0.0 sec</b></div>
+    <div><small>গতি</small><b id="plRate">—</b></div>
+   </div>
+   <div class="playlist-route" id="playlistRoute">রুট: প্রস্তুত → ফাইল/সার্ভার সংযোগ → M3U পার্স → চ্যানেল সংরক্ষণ</div>
+  </div>
+  <p class="privacy-note" style="margin-top:10px">URL loading requires the playlist server to allow browser CORS access. If URL import fails, download the authorized .m3u file from your provider and import it here. This player cannot bypass paid-channel access controls or provider restrictions.</p>
+ </section>
+ <section class="container section">
+  <div class="section-heading"><div><h2>Channel Library</h2><p>Search, filter, favourite and play your authorized sources.</p></div><span class="pill" id="channelCountBadge">0 channels</span></div>
+  <div class="sx-country-wrap"><div class="section-heading"><div><h2>দেশ অনুযায়ী চ্যানেল</h2><p>Country filter • Sports, News, Movies & more</p></div><span class="sx-mode-pill" id="sxModeLabel">Mobile Mode</span></div><div class="sx-country-grid" id="sxCountryGrid"></div></div><div class="channels-grid" id="channelsGrid"></div>
+   <div class="empty-state hidden" id="channelEmpty"><i class="fa-solid fa-magnifying-glass"></i><p style="margin-top:8px">কোনো channel নেই। Admin mode বা “Add authorized stream” দিয়ে নিজের অনুমোদিত stream যোগ করো।</p></div>
+ </section>
+
+ <section class="container section card iptv-update-system" id="updateSection">
+  <div class="section-heading"><div><h2>November 2026 Release Notes & Future Roadmap</h2><p>Implemented UI vs planned cloud features clearly separated.</p></div><button class="btn" id="editReleaseBtn"><i class="fa-solid fa-pen"></i> Admin edit</button></div>
+  <div class="update-list" id="updateList">
+   <article class="update-item"><strong>2026.11.23 — STREAMX AUTOLOAD & ADMIN FAVOURITES UPDATE</strong><small>Target release • device UI and player optimizations</small><p>White interface with green/blue/red accents, Cricfy-inspired circular channel-logo cards, country filters, first-open Mobile/Smart TV choice, direct channel-to-player navigation, three-line channel switcher, reduced animation, lazy logo loading and compact HLS buffering profile.</p></article>
+   <article class="update-item"><strong>2027.02.23 — Next planned milestone</strong><small>Roadmap • not yet released</small><p>Secure Firebase Authentication, server-enforced admin roles, cloud channel/favourite management, admin favourite channel shelf, basketball category, live database audit, TV remote keyboard navigation and tested low-bandwidth profiles.</p></article>
+   <article class="update-item"><strong>2026.11.23 Refresh — STREAMX Full Website</strong><small>Updated preview • UI and maintenance</small><p>November release-center refresh, updated version labels and metadata, preserved responsive layout, HLS/M3U player interface, channel search and favourites, local report tools, and clearer preview/cloud-feature status. Existing browser data remains local to this device.</p></article>
+   <article class="update-item"><strong>2026.10.10 Fix — IPTV Logo & Playback Loader</strong><small>Preview build • UI features</small><p>Responsive red spectrum theme, media player shell, M3U/M3U8 import, resilient logo fallback, animated playback loading state, full channel library rendered without a “Load next 100” button, search/category/favourites, local report inbox and demo admin workflow.</p></article>
+   <article class="update-item"><strong>Planned — Secure cloud support</strong><small>Not enabled until configured</small><p>Firebase Authentication, private ticket ownership, authenticated admin roles, database rules, notifications and server-side AI proxy.</p></article>
+   <article class="update-item"><strong>Planned — PRO ULTRA AI Optimizer</strong><small>Future roadmap</small><p>HTML/CSS/JS linting, performance reports, safe patch previews, accessibility checks, mobile layout checks, backups, tests, deployment checks and privacy-aware diagnostics.</p></article>
+  </div>
+
+  <div class="sx-update-rules" id="sxPublicUpdateRules">
+   <h3><i class="fa-solid fa-shield-halved"></i> STREAMX Update Rules</h3>
+   <ul>
+    <li><b>Official source only:</b> updates must come from the verified STREAMX HTTPS domain or official app store listing. Never install an unknown APK.</li>
+    <li><b>Versioning:</b> use MAJOR.MINOR.PATCH (example: 2.1.0). Preview builds must be labelled Preview/Beta and must not be presented as stable releases.</li>
+    <li><b>Compatibility:</b> publish separate Android Mobile and Android TV builds when device controls or layouts differ; Web/PWA updates are served from the web host.</li>
+    <li><b>Mandatory update:</b> require an update only for a verified critical security, compatibility or service issue. Otherwise updates remain optional.</li>
+    <li><b>Staged rollout:</b> test internally first, then release to a small group, then expand. Keep the previous known-good build for rollback.</li>
+    <li><b>Data safety:</b> back up cloud data before migrations. Never delete user playlists, favourites or history as a routine update action.</li>
+    <li><b>TV edition:</b> ad-free app interface. Android Mobile may show ads only after a compliant ad SDK, consent and privacy disclosures are configured.</li>
+    <li><b>Security:</b> Firebase rules and server authorization—not UI visibility—must enforce account, admin, ban and lock permissions.</li>
+    <li><b>Network/player:</b> do not promise “no lag” or fixed “9990+” speeds. Show measured connection information and adapt buffering to the actual network.</li>
+    <li><b>Release notes:</b> every published update must list version, date, supported platforms, changes, known issues and rollback/build reference.</li>
+   </ul>
+   <p class="privacy-note">These are product/release policies. They do not publish an update or configure Firebase, ad services, app-store signing, or a backend by themselves.</p>
+  </div>
+
+  <p class="privacy-note">“Latest update” means the version recorded in this template; change the version/date only when you publish a real release. No automatic release verification is connected.</p>
+ </section>
+
+ <section class="container section" id="supportSection">
+  <div class="section-heading"><div><h2>AI Help & User Support Center</h2><p>Ask a help command, submit a report and track the reply.</p></div><span class="pill warning">Local demo</span></div>
+  <div class="support-grid">
+   <section class="card widget">
+    <div class="widget-title"><span><i class="fa-solid fa-robot"></i> AI Help Command</span><span class="pill">Prototype</span></div>
+    <div class="ai-console">
+     <div class="ai-output" id="aiOutput" role="status" aria-live="polite">STREAMX Help Assistant ready.\nTry: “check player”, “report bug”, “how to add stream”, “security checklist”, or “future features”.\n\nThis is a local rule-based helper, not a connected LLM. For cloud AI, use a protected backend and never place a private AI key in frontend HTML.</div>
+     <div class="quick-commands">
+      <button class="quick-command" data-command="check player">check player</button><button class="quick-command" data-command="report bug">report bug</button><button class="quick-command" data-command="how to add stream">how to add stream</button><button class="quick-command" data-command="security checklist">security checklist</button><button class="quick-command" data-command="future features">future features</button>
+     </div>
+     <form id="aiCommandForm"><label class="field-label" for="aiCommand">Help command / প্রশ্ন</label><div class="command-row"><input class="field" id="aiCommand" maxlength="300" placeholder="যেমন: check player" required><button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Ask</button></div></form>
+     <p class="privacy-note">Assistant uses fixed local guidance. It does not inspect private files or send data to an AI service.</p>
+    </div>
+   </section>
+   <section class="card widget" id="reportWidget">
+    <div class="widget-title"><span><i class="fa-regular fa-flag"></i> Submit a user report</span><span class="pill">Ticket</span></div>
+    <form id="reportForm">
+     <div class="form-row"><div class="form-group"><label class="field-label" for="reportName">Name (optional)</label><input class="field" id="reportName" maxlength="50" placeholder="Your display name"></div>
+      <div class="form-group"><label class="field-label" for="reportCategory">Category</label><select class="field" id="reportCategory"><option>Bug</option><option>Playback</option><option>Performance</option><option>UI / Design</option><option>Feature Request</option><option>Security</option><option>Other</option></select></div></div>
+     <div class="form-group"><label class="field-label" for="reportTitle">Report title</label><input class="field" id="reportTitle" maxlength="90" required placeholder="Short description"></div>
+     <div class="form-group"><label class="field-label" for="reportMessage">Details</label><textarea class="field" id="reportMessage" maxlength="1500" required placeholder="Expected result, actual result and steps to reproduce…"></textarea></div>
+     <div class="form-group"><label class="field-label" for="reportEmail">Contact email (optional)</label><input class="field" id="reportEmail" type="email" maxlength="120" placeholder="Only if you want to provide it"></div>
+     <label class="privacy-note"><input type="checkbox" id="reportConsent"> I understand this demo saves the report in this browser only.</label>
+     <p class="privacy-note" style="margin:8px 0 12px">Password, API key, personal ID or other sensitive details দিও না। This form does not upload screenshots.</p>
+     <button class="btn btn-primary" type="submit"><i class="fa-solid fa-ticket"></i> Create report ticket</button>
+    </form>
+    <hr><div class="widget-title"><span>Your reports on this device</span><button class="btn btn-quiet" id="refreshReports"><i class="fa-solid fa-rotate"></i></button></div>
+    <div class="report-list" id="userReportList"></div>
+   </section>
+  </div>
+ </section>
+
+ <section class="container section admin-panel hidden" id="adminPanel">
+  <div class="section-heading"><div><h2><i class="fa-solid fa-user-shield"></i> Admin Control Center</h2><p>Secure Firebase sign-in • server-verified admin • cloud channel tools.</p></div><button class="btn btn-danger" id="adminLogout"><i class="fa-solid fa-right-from-bracket"></i> Close admin</button></div>
+  <div class="notice">🔐 Admin কাজের জন্য Firebase Email/Password login ও Render API-এর server-side UID verification ব্যবহৃত হয়। Token browser-এ password হিসেবে সংরক্ষণ করা হয় না।</div>
+
+  <div class="card" style="padding:14px;margin:12px 0;border:1px solid #b8d8f5">
+   <h3><i class="fa-solid fa-sliders"></i> Platform & Release Settings</h3>
+   <p class="privacy-note">এই controls-এর local settings এই browser-এ থাকবে। Real APK/Play Store update, remote user roles, EPG cloud sync এবং cross-device parental controls-এর জন্য production backend/build pipeline লাগবে।</p>
+   <div class="form-row"><div class="form-group"><label class="field-label" for="sxAdminBuildVersion">App version label</label><input class="field" id="sxAdminBuildVersion" maxlength="40" value="1.1.0 Preview"></div><div class="form-group"><label class="field-label" for="sxUpdateManifest">Optional update manifest URL</label><input class="field" id="sxUpdateManifest" type="url" placeholder="https://your-domain.example/version.json"></div></div>
+   <div class="admin-tools"><button class="btn btn-primary" id="sxSavePlatformSettings" type="button">Save version settings</button><button class="btn" id="sxCheckAppUpdate" type="button">Check update manifest</button><span id="sxUpdateStatus" class="privacy-note" role="status">No update server configured.</span></div>
+   <div class="form-row"><div class="form-group"><label class="field-label" for="sxParentalDefault">Parental-control default</label><select class="field" id="sxParentalDefault"><option value="off">Off</option><option value="on">On (local UI lock)</option></select></div><div class="form-group"><label class="field-label" for="sxEpgDefault">EPG source status</label><input class="field" id="sxEpgDefault" value="Local XMLTV import" readonly></div></div>
+  </div>
+
+  <div class="admin-tools"><span class="pill" id="adminReportCount">0 reports</span><button class="btn" id="exportReports"><i class="fa-solid fa-file-export"></i> Export reports JSON</button><button class="btn" id="clearReports"><i class="fa-regular fa-trash-can"></i> Clear local reports</button><button class="btn" id="addChannelAdmin"><i class="fa-solid fa-plus"></i> Add channel</button></div>
+  <div class="form-row"><div class="form-group"><label class="field-label" for="adminFilter">Filter reports</label><select class="field" id="adminFilter"><option value="All">All statuses</option><option>Received</option><option>In Review</option><option>Needs Info</option><option>Resolved</option><option>Closed</option></select></div><div class="form-group"><label class="field-label" for="releaseVersionInput">Update version label</label><input class="field" id="releaseVersionInput" maxlength="40" value="Version 1.0.1 • Preview Build"></div></div>
+  <div class="form-group"><label class="field-label" for="releaseSummaryInput">Update banner message</label><input class="field" id="releaseSummaryInput" maxlength="180" value="24 November 2026 preview build — Admin Firebase config scope fix, playlist loading monitor, and clearer live-stream status. This is not a published store release."></div>
+  <div class="admin-tools"><button class="btn btn-primary" id="saveRelease"><i class="fa-solid fa-floppy-disk"></i> Save banner locally</button><button class="btn" id="resetRelease">Reset banner</button></div>
+  
+
+  <div class="card sx-update-rules" id="sxAdminUpdateRules">
+   <h3><i class="fa-solid fa-code-branch"></i> Admin • Update Rules & Release Policy</h3>
+   <p class="privacy-note">শুধু verified admin এই নীতিমালা সম্পাদনা করতে পারবেন। এই ফর্মের policy browser-local; server persistence-এর জন্য authenticated backend endpoint যোগ করতে হবে।</p>
+   <div class="sx-policy-grid">
+    <div class="form-group"><label class="field-label" for="sxPolicyChannel">Release channel</label><select class="field" id="sxPolicyChannel"><option value="stable">Stable</option><option value="beta">Beta / Preview</option></select></div>
+    <div class="form-group"><label class="field-label" for="sxPolicyMinVersion">Minimum supported version</label><input class="field" id="sxPolicyMinVersion" maxlength="24" value="1.0.0" placeholder="1.0.0"></div>
+    <div class="form-group"><label class="field-label" for="sxPolicyMandatory">Update requirement</label><select class="field" id="sxPolicyMandatory"><option value="optional">Optional update</option><option value="mandatory">Mandatory update (critical only)</option></select></div>
+    <div class="form-group"><label class="field-label" for="sxPolicyRollout">Rollout percentage</label><input class="field" id="sxPolicyRollout" type="number" min="1" max="100" value="10"></div>
+   </div>
+   <div class="form-group"><label class="field-label" for="sxPolicyPlatforms">Supported platforms</label><input class="field" id="sxPolicyPlatforms" value="Android Mobile, Android TV, Web/PWA" maxlength="120"></div>
+   <div class="form-group"><label class="field-label" for="sxPolicyNotes">Release notes / update rules</label><textarea class="field" id="sxPolicyNotes" rows="3" maxlength="1200">Performance tuning, security fixes, compatibility checks and tested release notes.</textarea></div>
+   <div class="admin-tools"><button class="btn btn-primary" id="sxSaveUpdatePolicy" type="button">Save update rules</button><button class="btn" id="sxExportUpdatePolicy" type="button">Export policy JSON</button><span id="sxPolicySaveStatus" class="privacy-note" role="status">Default policy loaded.</span></div>
+  </div>
+  <div class="card" id="streamxCloudAdmin" style="padding:14px;margin:12px 0;border:1px solid #b8d8f5">
+   <h3>STREAMX Cloud Channel Manager</h3><p class="privacy-note">Firebase Authentication ও Render API দ্বারা সুরক্ষিত। এখানে যোগ করা channel cloud catalogue-এ সংরক্ষিত হবে। কেবল অনুমোদিত stream ব্যবহার করো।</p>
+   <div class="form-row"><input class="field" id="sxChannelName" placeholder="Channel name" maxlength="100"><input class="field" id="sxChannelUrl" type="url" placeholder="Stream URL (HTTPS)" maxlength="2000"></div>
+   <div class="form-row"><input class="field" id="sxChannelLogo" type="url" placeholder="Logo URL (optional)" maxlength="1000"><input class="field" id="sxChannelCategory" placeholder="Category e.g. News / Sports" maxlength="60"></div>
+   <div class="form-row"><input class="field" id="sxChannelCountry" placeholder="Country (optional)" maxlength="60"><input class="field" id="sxChannelDescription" placeholder="Description (optional)" maxlength="300"></div>
+   <div class="admin-tools"><button class="btn btn-primary" id="sxSaveChannel">Add channel</button><button class="btn" id="sxCancelEdit" style="display:none">Cancel edit</button><button class="btn" id="sxRefreshChannels">Refresh cloud list</button><span id="sxCloudStatus" class="privacy-note" role="status">Admin login required</span></div>
+   <div id="sxCloudChannelList" style="display:grid;gap:9px;margin-top:12px"></div>
+   <hr style="margin:16px 0"><h3>Import M3U playlist to cloud</h3><div class="form-row"><input class="field" id="sxM3UName" placeholder="Playlist name (optional)"><input class="field" id="sxM3UFile" type="file" accept=".m3u,.m3u8,.txt"></div>
+   <label style="display:flex;gap:8px;align-items:center;margin:9px 0"><input id="sxM3UReplace" type="checkbox"> Replace current cloud channel list (danger: removes existing channels)</label><button class="btn btn-primary" id="sxImportM3U">Import selected M3U</button><a class="btn" id="sxExportM3U" href="https://streamx-server-hy40.onrender.com/api/playlist.m3u" target="_blank" rel="noopener">Export cloud playlist</a>
+   <hr style="margin:16px 0"><h3>Saved Playlist Manager</h3>
+   <p class="privacy-note">M3U playlist Firebase-এ সংরক্ষণ, পুনরায় লোড, সম্পাদনা, মুছে ফেলা এবং cloud channel-এ import করা যাবে।</p>
+   <div class="form-row"><input class="field" id="sxSavedPlaylistName" maxlength="120" placeholder="Saved playlist name"><input class="field" id="sxSavedPlaylistFile" type="file" accept=".m3u,.m3u8,.txt"></div>
+   <textarea class="field" id="sxSavedPlaylistContent" rows="7" spellcheck="false" placeholder="#EXTM3U&#10;#EXTINF:-1,Channel name&#10;https://example.com/stream.m3u8" style="width:100%;font-family:monospace"></textarea>
+   <div class="form-row" style="margin-top:9px"><select class="field" id="sxSavedPlaylistSelect"><option value="">Select saved playlist</option></select><button class="btn" id="sxRefreshSavedPlaylists" type="button">Refresh saved list</button></div>
+   <div class="admin-tools"><button class="btn btn-primary" id="sxSavePlaylist" type="button">Save new playlist</button><button class="btn" id="sxLoadPlaylist" type="button">Load selected</button><button class="btn" id="sxUpdatePlaylist" type="button">Update selected</button><button class="btn btn-danger" id="sxDeletePlaylist" type="button">Delete selected</button></div>
+   <div class="admin-tools"><button class="btn btn-primary" id="sxImportSavedReplace" type="button">Import: Replace cloud channels</button><button class="btn" id="sxImportSavedAppend" type="button">Import: Append channels</button><span id="sxSavedPlaylistStatus" class="privacy-note" role="status">Admin login required</span></div>
+  </div>
+  <div id="adminTickets"></div>
+ </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><div><strong>STREAMX — STAR LIVE TV PRO ULTRA ENGINE</strong><p style="margin-top:6px">2026 Preview • Designed for mobile-first use • Not affiliated with any broadcaster.</p></div><div class="footer-links"><button id="footerSupport">Support</button><button id="footerUpdates">Update notes</button><button id="footerPrivacy">Privacy notes</button><button id="footerAdmin">Admin panel</button></div></div></footer>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="modal"><button class="icon-btn modal-close" id="modalClose" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button><h2 id="modalTitle" style="font-size:1.2rem;margin-bottom:16px;padding-right:40px">Dialog</h2><div id="modalContent"></div></div>
+</div>
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* STREAMX 2026 frontend preview. Firebase is intentionally marked disconnected until a real project config and server-enforced security rules are supplied. */
+const STORAGE_KEYS={channels:"streamx2026.channels",favorites:"streamx2026.favorites",reports:"streamx2026.reports",theme:"streamx2026.theme",release:"streamx2026.release"};
+const CHANNELS_PER_PAGE=Number.MAX_SAFE_INTEGER; // all matching channels render together
+const defaultChannels=[];
+let channels=readJSON(STORAGE_KEYS.channels,defaultChannels);
+let favorites=new Set(readJSON(STORAGE_KEYS.favorites,[]));
+let reports=readJSON(STORAGE_KEYS.reports,[]);
+let currentChannel=null,currentCategory="All",hlsInstance=null,adminMode=false;
+let activeCountry="All";
+const $=id=>document.getElementById(id);
+function setFirebaseSignal(connected){const root=$("firebaseSignal"),label=$("firebaseSignalText");if(!root||!label)return;root.style.background=connected?"#ecfdf3":"#fff1f2";root.style.color=connected?"#067647":"#b42336";root.style.borderColor=connected?"#abefc6":"#fecdd3";const dot=root.querySelector(".dot");if(dot)dot.style.background=connected?"#16a34a":"#dc2626";label.textContent=connected?"Firebase সংযুক্ত":"Firebase সংযুক্ত নয়"}
+setFirebaseSignal(false);
+
+function readJSON(key,fallback){try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback}catch{return fallback}}
+function saveJSON(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{toast("Browser storage unavailable or full.","error");return false}}
+function safeText(value,max=1500){return String(value??"").replace(/[<>]/g,"").trim().slice(0,max)}
+function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(message,type="ok"){const el=document.createElement("div");el.className="toast "+type;el.textContent=message;$("toastStack").append(el);setTimeout(()=>el.remove(),3800)}
+function makeId(){return "SX-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase()}
+function placeholderIcon(label){const letter=(label||"TV").slice(0,2).toUpperCase();return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><defs><linearGradient id="g"><stop stop-color="#ff1e3c"/><stop offset="1" stop-color="#ff7b00"/></linearGradient></defs><rect width="100" height="100" rx="50" fill="#14090c"/><circle cx="50" cy="50" r="47" fill="none" stroke="url(#g)" stroke-width="3"/><text x="50" y="58" font-family="Arial" font-size="26" font-weight="bold" text-anchor="middle" fill="white">${letter.replace(/[&<>]/g,"")}</text></svg>`)}
+function updateCounters(){$("statChannels").textContent=channels.length;$("overviewChannels").textContent=channels.length;$("channelCountBadge").textContent=channels.length+" channels";$("statFavourites").textContent=favorites.size;$("overviewSaved").textContent=favorites.size;$("statPlayer").textContent=currentChannel?"Selected":"Standby"}
+function renderChannels(){
+ const query=$("channelSearch").value.trim().toLowerCase();
+ const filtered=channels.filter(c=>(currentCategory==="All"||c.category===currentCategory)&&(activeCountry==="All"||String(c.country||"Other").toLowerCase()===activeCountry.toLowerCase())&&(`${c.name} ${c.category} ${c.country||""} ${c.description||""}`).toLowerCase().includes(query));
+ const pageItems=filtered; // render the entire filtered catalogue; no manual paging
+ $("channelsGrid").innerHTML="";$("quickChannelList").innerHTML="";
+ pageItems.forEach(c=>{
+  const card=document.createElement("article");card.className="channel-card"+(currentChannel?.id===c.id?" selected":"");
+  const img=document.createElement("img");img.src=c.logo||placeholderIcon(c.name);img.alt="";img.loading="lazy";img.onerror=()=>{img.onerror=null;img.src=placeholderIcon(c.name)};
+  const fav=document.createElement("button");fav.className="fav-star"+(favorites.has(c.id)?" active":"");fav.innerHTML='<i class="fa-solid fa-star"></i>';fav.title="Toggle favourite";fav.setAttribute("aria-label","Toggle favourite");
+  fav.addEventListener("click",e=>{e.stopPropagation();toggleFavorite(c.id)});
+  const del=document.createElement("button");del.className="channel-admin-delete";del.innerHTML='<i class="fa-solid fa-trash"></i>';del.title="Delete channel";del.addEventListener("click",e=>{e.stopPropagation();deleteChannel(c.id)});
+  const h=document.createElement("h3");h.textContent=c.name;const p=document.createElement("p");p.textContent=c.category||"Other";
+  card.append(fav,del,img,h,p);card.setAttribute("tabindex","0");card.setAttribute("role","button");card.addEventListener("click",()=>{document.getElementById("playerSidebar")?.classList.remove("open");playChannel(c.id)});card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();document.getElementById("playerSidebar")?.classList.remove("open");playChannel(c.id)}});$("channelsGrid").append(card);
+  const quick=document.createElement("button");quick.className="p-switch-item";const qi=document.createElement("img");qi.src=c.logo||placeholderIcon(c.name);qi.alt="";qi.width=32;qi.height=32;qi.loading="lazy";const qt=document.createElement("span");qt.textContent=c.name;quick.append(qi,qt);quick.addEventListener("click",()=>{playChannel(c.id);$("playerSidebar").classList.remove("open")});$("quickChannelList").append(quick);
+ });
+ $("channelEmpty").classList.toggle("hidden",filtered.length!==0);
+ updateCounters();
+}
+function toggleFavorite(id){favorites.has(id)?favorites.delete(id):favorites.add(id);saveJSON(STORAGE_KEYS.favorites,[...favorites]);renderChannels();toast(favorites.has(id)?"Added to favourites":"Removed from favourites")}
+function cleanupPlayer(){if(hlsInstance){try{hlsInstance.destroy()}catch{}hlsInstance=null}const v=$("mainVideo");v.pause();v.removeAttribute("src");v.load();$("embedFrame").src="about:blank";$("embedFrame").style.display="none";v.style.display="block"}
+// Direct channel playback: no ad countdown or external redirect.
+function playChannel(id){
+ const target=channels.find(x=>x.id===id);
+ if(!target){toast("চ্যানেল পাওয়া যায়নি।","error");return}
+ const gate=$("sxAdGate");if(gate)gate.classList.remove("active");
+ const playerArea=$("screenWrapper");
+ if(playerArea)playerArea.scrollIntoView({behavior:"smooth",block:"start"});
+ launchChannel(id);
+}
+function launchChannel(id){
+ const c=channels.find(x=>x.id===id);if(!c){toast("Channel not found.","error");return}
+ currentChannel=c;
+ const video=$("mainVideo");
+ setTimeout(()=>$("screenWrapper").scrollIntoView({behavior:"smooth",block:"start"}),30)
+ const loader=$("streamxPlaybackLoader");
+ const msg=$("sxLoadingMessage");
+ if(loader){loader.classList.add("active");if(msg)msg.textContent="Opening "+c.name+"…"}
+ if(hlsInstance){try{hlsInstance.destroy()}catch(e){}hlsInstance=null}
+ if(video){video.pause();video.removeAttribute("src");video.load()}
+ $("playerStatus").textContent="চালু হচ্ছে";
+ $("playerHint").textContent="ভিডিও সংযোগ করা হচ্ছে…";
+ $("currentChannelTitle").textContent=c.name;
+ $("currentCategory").textContent=c.category||"Live TV";
+ const url=String(c.url||"").trim();
+ if(!/^https?:\/\//i.test(url)){
+  if(loader)loader.classList.remove("active");
+  $("playerStatus").textContent="INVALID URL";$("playerHint").textContent="This channel has no valid HTTP/HTTPS stream URL";
+  toast("এই channel-এ valid stream URL নেই।","error");renderChannels();return
+ }
+ const isHls=/\.m3u8(?:$|[?#])/i.test(url)||/\.m3u8/i.test(url);
+ const hideLoader=()=>{if(loader)loader.classList.remove("active")};
+ if(video){
+  video.onwaiting=()=>{if(loader)loader.classList.add("active")};
+  video.onplaying=()=>{hideLoader();$("playerStatus").textContent="চলছে";$("playerHint").textContent="Stream is playing"};
+  video.oncanplay=()=>{if(video.readyState>=3)hideLoader()};
+  video.onerror=()=>{hideLoader();$("playerStatus").textContent="PLAYBACK ERROR";$("playerHint").textContent="স্ট্রিম পাওয়া যায়নি, ব্লক হয়েছে অথবা সমর্থিত নয়";toast("ভিডিও চালু হয়নি। Stream URL, HLS format, CORS এবং provider access পরীক্ষা করুন।","error")};
+ }
+ if(isHls&&window.Hls&&Hls.isSupported()){
+  hlsInstance=new Hls({enableWorker:true,lowLatencyMode:false,capLevelToPlayerSize:true,backBufferLength:8,maxBufferLength:4,maxMaxBufferLength:8,abrEwmaDefaultEstimate:500000,manifestLoadingTimeOut:15000,levelLoadingTimeOut:15000,fragLoadingTimeOut:20000});
+  hlsInstance.loadSource(url);hlsInstance.attachMedia(video);
+  hlsInstance.on(Hls.Events.MANIFEST_PARSED,()=>{if(msg)msg.textContent="Stream ready — starting playback…";video.play().catch(()=>{hideLoader();$("playerStatus").textContent="TAP PLAY";$("playerHint").textContent="Press Play if autoplay is blocked"})});
+  hlsInstance.on(Hls.Events.ERROR,(_,data)=>{if(data.fatal){hideLoader();$("playerStatus").textContent="PLAYBACK ERROR";$("playerHint").textContent="Check stream URL, CORS, codec or provider access";toast("HLS playback failed. This playlist may not be a playable stream.","error")}});
+ }else if(isHls&&video.canPlayType("application/vnd.apple.mpegurl")){
+  video.src=url;video.load();video.play().catch(()=>{hideLoader();$("playerStatus").textContent="TAP PLAY";$("playerHint").textContent="Press Play if autoplay is blocked"});
+ }else if(!isHls&&/\.(mp4|webm|ogg|mp3|aac)(?:$|[?#])/i.test(url)){
+  video.src=url;video.load();video.play().catch(()=>{hideLoader();$("playerStatus").textContent="TAP PLAY";$("playerHint").textContent="Press Play if autoplay is blocked"});
+ }else{
+  hideLoader();$("playerStatus").textContent="UNSUPPORTED URL";$("playerHint").textContent="Channel list M3U is not a playable video stream";
+  toast("এই URL-টি playable media stream নয়। channel list M3U নয়, আসল stream URL লাগবে।","error");
+ }
+ renderChannels();
+}
+function deleteChannel(id){if(!adminMode){toast("Admin mode required.","error");return}if(!confirm("Delete this channel from this browser?"))return;channels=channels.filter(c=>c.id!==id);favorites.delete(id);saveJSON(STORAGE_KEYS.channels,channels);saveJSON(STORAGE_KEYS.favorites,[...favorites]);if(currentChannel?.id===id){cleanupPlayer();currentChannel=null;$("currentChannelTitle").textContent="Welcome to STREAMX";$("playerStatus").textContent="READY"}renderChannels();toast("Channel deleted locally")}
+function addChannelDialog(){
+ if(!adminMode){toast("Open demo admin mode first.","error");return}
+ openModal("Add authorized channel",`<form id="addChannelForm"><div class="form-group"><label class="field-label">Channel name</label><input class="field" name="name" maxlength="80" required></div><div class="form-row"><div class="form-group"><label class="field-label">Category</label><select class="field" name="category"><option>News</option><option>Sports</option><option>Entertainment</option><option>Education</option><option>Other</option></select></div><div class="form-group"><label class="field-label">Logo URL (optional)</label><input class="field" name="logo" type="url" maxlength="500" placeholder="https://…"></div></div><div class="form-group"><label class="field-label">Authorized stream URL</label><input class="field" name="url" type="url" maxlength="1500" required placeholder="https://…m3u8 or direct media URL"></div><button class="btn btn-primary" type="submit">Save channel locally</button></form>`);
+ $("addChannelForm").addEventListener("submit",e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const url=safeText(fd.get("url"),1500);if(!/^https:\/\//i.test(url)){toast("For safety, use HTTPS stream URLs.","error");return}const item={id:makeId(),name:safeText(fd.get("name"),80),category:safeText(fd.get("category"),40),logo:safeText(fd.get("logo"),500),url,description:"Added locally"};channels.push(item);saveJSON(STORAGE_KEYS.channels,channels);renderChannels();closeModal();toast("Channel added to this browser")});
+}
+
+/* M3U / IPTV playlist loader. Imports metadata only; stream playback still depends on provider permissions/CORS. */
+function classifyPlaylistCategory(group){
+ const g=String(group||"").toLowerCase();
+ if(/news|খবর| সংবাদ/.test(g))return "News";
+ if(/sport|football|cricket|খেলা/.test(g))return "Sports";
+ if(/movie|film|entertain|music|drama|cinema|বিনোদন/.test(g))return "Entertainment";
+ if(/education|learn|school|শিক্ষা/.test(g))return "Education";
+ return "Other";
+}
+function parseM3U(text){
+ const lines=String(text||"").replace(/^\uFEFF/,"").split(/\r?\n/);
+ const imported=[];let meta=null;
+ for(let i=0;i<lines.length;i++){
+  const line=lines[i].trim();if(!line)continue;
+  if(line.startsWith("#EXTINF")){
+   const comma=line.indexOf(",");const attrs=comma>=0?line.slice(0,comma):line;const display=comma>=0?line.slice(comma+1).trim():"Unnamed channel";
+   const attr=(name)=>{const re=new RegExp(name+'="([^"]*)"',"i");const m=attrs.match(re);return m?m[1].trim():""};
+   meta={name:display||attr("tvg-name")||"Unnamed channel",logo:attr("tvg-logo"),group:attr("group-title"),tvgId:attr("tvg-id")};
+   if(!meta.name||meta.name==="Unnamed channel")meta.name=attr("tvg-name")||meta.name;
+  }else if(!line.startsWith("#")&&/^https?:\/\//i.test(line)){
+   const name=(meta?.name||"Channel "+(imported.length+1)).slice(0,120);
+   imported.push({id:makeId(),name,category:classifyPlaylistCategory(meta?.group),logo:/^https:\/\//i.test(meta?.logo||"")?meta.logo:"",url:line.slice(0,4000),description:meta?.group||meta?.tvgId||"Imported from M3U",source:"playlist"});
+   meta=null;
+  }
+ }
+ return imported;
+}
+const playlistMonitor={started:0,bytes:0,totalBytes:0,timer:null};
+function formatBytes(n){if(!Number.isFinite(n)||n<=0)return "0 B";const u=["B","KB","MB","GB"];const i=Math.min(Math.floor(Math.log(n)/Math.log(1024)),3);return (n/Math.pow(1024,i)).toFixed(i?1:0)+" "+u[i]}
+function updatePlaylistMonitor({stage,percent,bytes,totalBytes,route}={}){
+ if(stage!==undefined)$("playlistStage").textContent=stage;
+ if(percent!==undefined){const p=Math.max(0,Math.min(100,percent));$("playlistPercent").textContent=Math.round(p)+"%";$("playlistProgressBar").style.width=p+"%"}
+ if(bytes!==undefined){playlistMonitor.bytes=bytes;$("plBytes").textContent=formatBytes(bytes)}
+ if(totalBytes!==undefined){playlistMonitor.totalBytes=totalBytes}
+ if(route!==undefined)$("playlistRoute").textContent="রুট: "+route;
+ if(playlistMonitor.started){const sec=(performance.now()-playlistMonitor.started)/1000;$("plElapsed").textContent=sec.toFixed(1)+" sec ("+(sec/60).toFixed(2)+" min)";if(sec>0&&playlistMonitor.bytes>0)$("plRate").textContent=formatBytes(playlistMonitor.bytes/sec)+"/s"}
+}
+function beginPlaylistLoad(label){
+ if(playlistMonitor.timer)clearInterval(playlistMonitor.timer);
+ playlistMonitor.started=performance.now();playlistMonitor.bytes=0;playlistMonitor.totalBytes=0;
+ $("plAdded").textContent="0";$("plDuplicates").textContent="0";
+ updatePlaylistMonitor({stage:label,percent:0,bytes:0,route:"সংযোগ শুরু"});
+ playlistMonitor.timer=setInterval(()=>updatePlaylistMonitor({}),150);
+}
+function finishPlaylistLoad(ok=true){
+ if(playlistMonitor.timer){clearInterval(playlistMonitor.timer);playlistMonitor.timer=null}
+ updatePlaylistMonitor({stage:ok?"লোড সম্পন্ন":"লোড ব্যর্থ",percent:ok?100:0,route:ok?"সংযোগ → ডাউনলোড → পার্স → সংরক্ষণ সম্পন্ন":"ত্রুটি শনাক্ত; নিচের স্ট্যাটাস দেখুন"});
+}
+function mergeImportedChannels(items){
+ if(!items.length){$("plTotal").textContent=String(channels.length);$("plAdded").textContent="0";$("plDuplicates").textContent="0";toast("No valid HTTP/HTTPS channel URLs found in this playlist.","error");return 0}
+ const known=new Set(channels.map(c=>String(c.url||"").trim()));
+ const unique=[];
+ for(const c of items){const key=String(c.url||"").trim();if(key&&!known.has(key)){known.add(key);unique.push(c)}}
+ const previousLength=channels.length;
+ channels=channels.concat(unique);
+ if(!saveJSON(STORAGE_KEYS.channels,channels)){channels=channels.slice(0,previousLength);$("playlistStatus").textContent="Storage failed: browser storage quota may be full.";return 0}
+ renderChannels();
+ $("plTotal").textContent=String(channels.length);$("plAdded").textContent=String(unique.length);$("plDuplicates").textContent=String(items.length-unique.length);
+ $("playlistStatus").textContent=`Imported ${unique.length} new channels (${items.length} valid entries; ${items.length-unique.length} duplicate URLs skipped). Total library: ${channels.length}.`;
+ toast(`Playlist loaded: ${unique.length} new channels`);return unique.length;
+}
+async function readResponseWithProgress(response){
+ const total=Number(response.headers.get("content-length"))||0;
+ updatePlaylistMonitor({stage:"প্লেলিস্ট ডাউনলোড হচ্ছে",percent:total?0:5,totalBytes:total,route:"সার্ভার → ব্রাউজার ডাউনলোড"});
+ if(!response.body?.getReader){const t=await response.text();const bytes=new TextEncoder().encode(t).length;updatePlaylistMonitor({bytes,percent:90});return t}
+ const reader=response.body.getReader();const chunks=[];let received=0;
+ while(true){const {done,value}=await reader.read();if(done)break;chunks.push(value);received+=value.byteLength;updatePlaylistMonitor({bytes:received,percent:total?Math.min(85,received/total*85):Math.min(80,5+Math.log10(received+1)*12)})}
+ const merged=new Uint8Array(received);let offset=0;for(const chunk of chunks){merged.set(chunk,offset);offset+=chunk.length}
+ return new TextDecoder("utf-8").decode(merged);
+}
+async function importPlaylistFromUrl(){
+ const url=$("playlistUrl").value.trim();
+ if(!/^https:\/\//i.test(url)){toast("HTTPS playlist URL দিন।","error");return}
+ $("loadPlaylistUrl").disabled=true;beginPlaylistLoad("URL প্লেলিস্ট লোড হচ্ছে");$("playlistStatus").textContent="Loading playlist URL…";
+ try{
+  const response=await fetch(url,{method:"GET",cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const text=await readResponseWithProgress(response);
+  if(!text.includes("#EXTM3U")&&!text.includes("#EXTINF"))throw new Error("This response does not look like an M3U playlist");
+  updatePlaylistMonitor({stage:"চ্যানেল তালিকা পার্স হচ্ছে",percent:90,route:"ডাউনলোড সম্পন্ন → M3U লাইন বিশ্লেষণ"});
+  const entries=parseM3U(text);mergeImportedChannels(entries);
+  updatePlaylistMonitor({percent:98,route:"M3U পার্স → ডুপ্লিকেট পরীক্ষা → লোকাল সংরক্ষণ"});
+  finishPlaylistLoad(true);
+ }catch(err){
+  $("playlistStatus").textContent="URL import failed: "+(err?.message||"network/CORS error")+". Try importing the downloaded .m3u file instead.";
+  updatePlaylistMonitor({stage:"URL লোড ব্যর্থ",route:"সার্ভার/CORS/নেটওয়ার্কে সমস্যা"});
+  finishPlaylistLoad(false);toast("Playlist URL load failed. CORS/provider access may block browser fetch.","error");
+ }finally{$("loadPlaylistUrl").disabled=false}
+}
+async function importPlaylistFromFile(){
+ const file=$("playlistFile").files?.[0];if(!file){toast("আগে .m3u বা .m3u8 file select করো।","error");return}
+ $("loadPlaylistFile").disabled=true;beginPlaylistLoad("ফাইল পড়া হচ্ছে");$("playlistStatus").textContent=`Reading ${file.name}…`;
+ try{
+  const text=await new Promise((resolve,reject)=>{
+   const reader=new FileReader();
+   reader.onprogress=e=>{if(e.lengthComputable)updatePlaylistMonitor({stage:"ফাইল পড়া হচ্ছে",bytes:e.loaded,totalBytes:e.total,percent:e.loaded/e.total*80,route:"লোকাল ফাইল → ব্রাউজার"});};
+   reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(reader.error||new Error("File read failed"));reader.readAsText(file);
+  });
+  if(!text.includes("#EXTM3U")&&!text.includes("#EXTINF"))throw new Error("M3U header/entries not found");
+  updatePlaylistMonitor({stage:"চ্যানেল তালিকা পার্স হচ্ছে",bytes:file.size,percent:90,route:"ফাইল পড়া → M3U লাইন বিশ্লেষণ"});
+  mergeImportedChannels(parseM3U(text));finishPlaylistLoad(true);
+ }catch(err){$("playlistStatus").textContent="File import failed: "+(err?.message||"invalid file");updatePlaylistMonitor({stage:"ফাইল লোড ব্যর্থ",route:"ফাইল পড়া বা M3U ফরম্যাটে সমস্যা"});finishPlaylistLoad(false);toast("M3U file পড়া যায়নি।","error")}
+ finally{$("loadPlaylistFile").disabled=false}
+}
+function exportChannelsAsM3U(){
+ const items=channels.filter(c=>/^https?:\/\//i.test(c.url||""));
+ if(!items.length){toast("Export করার মতো channel নেই।","error");return}
+ const lines=["#EXTM3U"];
+ items.forEach(c=>{const name=String(c.name||"Channel").replace(/[,\r\n]/g," ").slice(0,120);const logo=/^https:\/\//i.test(c.logo||"")?` tvg-logo="${c.logo.replace(/"/g,"%22")}"`:"";lines.push(`#EXTINF:-1${logo} group-title="${String(c.category||"Other").replace(/["\r\n]/g,"")}",${name}`,c.url)});
+ const blob=new Blob([lines.join("\n")+"\n"],{type:"audio/x-mpegurl;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="streamx-authorized-playlist.m3u";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("M3U export ready");
+}
+$("loadPlaylistUrl").addEventListener("click",importPlaylistFromUrl);
+$("loadPlaylistFile").addEventListener("click",importPlaylistFromFile);
+$("exportPlaylist").addEventListener("click",exportChannelsAsM3U);
+$("clearImportedPlaylist").addEventListener("click",()=>{
+ if(!confirm("Remove imported playlist channels from this browser? Manually added channels will remain."))return;
+ const before=channels.length;channels=channels.filter(c=>c.source!=="playlist");saveJSON(STORAGE_KEYS.channels,channels);renderChannels();$("playlistStatus").textContent=`Removed ${before-channels.length} imported playlist channels.`;toast("Imported playlist channels cleared");
+});
+
+function openModal(title,content){$("modalTitle").textContent=title;$("modalContent").innerHTML=content;$("modalBackdrop").classList.add("open");$("modalClose").focus()}
+function closeModal(){$("modalBackdrop").classList.remove("open");$("modalContent").innerHTML=""}
+$("modalClose").addEventListener("click",closeModal);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();$("playerSidebar").classList.remove("open")}})
+$("addStreamBtn").addEventListener("click",()=>adminMode?addChannelDialog():toast("Admin permission required","error"));$("addChannelAdmin").addEventListener("click",()=>adminMode?addChannelDialog():toast("Admin permission required","error"));
+$("channelSearch").addEventListener("input",()=>{renderChannels()});
+$("categoryGrid").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;currentCategory=b.dataset.category;renderPage=0;document.querySelectorAll(".category-card").forEach(x=>x.classList.toggle("active",x===b));renderChannels()});
+$("favoriteCurrent").addEventListener("click",()=>currentChannel?toggleFavorite(currentChannel.id):toast("আগে একটি channel select করো","error"));
+// Player seek controls: rewind only; no automatic ad-skip or forced redirects.
+document.querySelectorAll("[data-seek-back]").forEach(btn=>btn.addEventListener("click",()=>{const v=$("mainVideo");if(!v||!Number.isFinite(v.duration)){toast("আগে একটি seekable video চালু করো।","error");return}v.currentTime=Math.max(0,v.currentTime-Number(btn.dataset.seekBack))}));
+let sxLotterySeconds=0;
+$("sxLotteryBtn").addEventListener("click",()=>{const prizes=[6,10,12,15];sxLotterySeconds=prizes[Math.floor(Math.random()*prizes.length)];$("sxLotteryResult").textContent=`🎉 তোমার লটারি: ${sxLotterySeconds} সেকেন্ড`;const b=$("sxPrizeSkipBtn");b.disabled=false;b.textContent=`Skip +${sxLotterySeconds}s`});
+$("sxPrizeSkipBtn").addEventListener("click",()=>{const v=$("mainVideo");if(!sxLotterySeconds||!v||!Number.isFinite(v.duration)){toast("প্রথমে lottery draw করে একটি video চালু করো।","error");return}v.currentTime=Math.min(v.duration,v.currentTime+sxLotterySeconds)});
+$("playerMenuBtn").addEventListener("click",()=>$("playerSidebar").classList.toggle("open"));$("closePlayerSidebar").addEventListener("click",()=>$("playerSidebar").classList.remove("open"));
+$("muteBtn").addEventListener("click",()=>{$("mainVideo").muted=!$("mainVideo").muted;$("muteBtn").innerHTML=$("mainVideo").muted?'<i class="fa-solid fa-volume-xmark"></i>':'<i class="fa-solid fa-volume-high"></i>'});
+$("fullscreenBtn").addEventListener("click",async()=>{try{const el=$("screenWrapper");if(document.fullscreenElement)await document.exitFullscreen();else if(el.requestFullscreen)await el.requestFullscreen();else toast("Fullscreen is not supported by this browser.","error")}catch{toast("Fullscreen unavailable.","error")}});
+$("copyDiagnostics").addEventListener("click",async()=>{const text=`STREAMX diagnostics\nVersion: 1.0.1 Preview\nBrowser: ${navigator.userAgent}\nOnline: ${navigator.onLine}\nChannels: ${channels.length}\nSelected: ${currentChannel?.name||"none"}\nPlayer status: ${$("playerStatus").textContent}`;try{await navigator.clipboard.writeText(text);toast("Diagnostics copied")}catch{openModal("Diagnostics",`<textarea class="field" readonly>${escapeHTML(text)}</textarea><p class="privacy-note">Select and copy manually. Check for private information before sharing.</p>`)}});
+
+/* Local help commands: intentionally not represented as a connected AI model. */
+function answerCommand(command){
+ const q=command.toLowerCase();let answer;
+ if(q.includes("player")||q.includes("playback")||q.includes("stream"))answer="PLAYER CHECK\n1. Select a channel.\n2. Use an authorized HTTPS HLS .m3u8 or browser-supported direct media URL.\n3. If playback fails, check the URL, provider permissions, CORS, browser support and network.\n4. This page cannot bypass a broadcaster's access controls.";
+ else if(q.includes("report")||q.includes("bug"))answer="REPORT HELP\nUse the User Report form below. Include expected behaviour, actual behaviour and reproducible steps. Never include passwords, API keys or private identity details. The current demo stores tickets in this browser only.";
+ else if(q.includes("add")||q.includes("channel"))answer="ADD CHANNEL\nOpen Admin Sign-in → Demo admin mode → Add channel. Add only a stream you own or are authorized to distribute. This preview stores channel metadata locally; it does not sync across devices.";
+ else if(q.includes("security")||q.includes("admin"))answer="SECURITY CHECKLIST\n• Use real Firebase Authentication.\n• Enforce admin role checks on the server/database rules.\n• Deny access by default; grant minimum permissions.\n• Validate all user input and rate-limit reports.\n• Never place private AI keys or service-account secrets in frontend code.\n• Test rules before production.";
+ else if(q.includes("future")||q.includes("roadmap")||q.includes("update"))answer="2026 / FUTURE ROADMAP\n• Verified release banner and changelog\n• Secure cloud ticket system and admin replies\n• Authenticated roles and audit log\n• AI code review through protected backend\n• HTML/CSS/JS lint, safe fix preview and rollback\n• Performance, accessibility and responsive tests\n• Git backups, deployment checks and release smoke tests\nThese cloud features are planned, not connected in this preview.";
+ else answer="I can help with: check player, report bug, how to add stream, security checklist, future features. This is a local rule-based helper, not a live AI model. Ask a more specific question or submit a support ticket.";
+ $("aiOutput").textContent=answer;
+}
+$("aiCommandForm").addEventListener("submit",e=>{e.preventDefault();const cmd=safeText($("aiCommand").value,300);if(!cmd)return;answerCommand(cmd);$("aiCommand").value=""});
+document.querySelectorAll("[data-command]").forEach(b=>b.addEventListener("click",()=>answerCommand(b.dataset.command)));
+
+/* User tickets are local-only in this single-file prototype. */
+function renderUserReports(){
+ const list=$("userReportList");list.innerHTML="";
+ if(!reports.length){list.innerHTML='<div class="empty-state">এখনো কোনো report নেই।</div>';return}
+ [...reports].reverse().forEach(r=>{const box=document.createElement("article");box.className="report-card";const top=document.createElement("div");top.className="report-top";const title=document.createElement("h3");title.textContent=r.title;const status=document.createElement("span");status.className="report-status";status.textContent=r.status;top.append(title,status);const meta=document.createElement("p");meta.textContent=`${r.id} • ${r.category} • ${new Date(r.createdAt).toLocaleString()}`;const desc=document.createElement("p");desc.textContent=r.message;box.append(top,meta,desc);if(r.reply){const reply=document.createElement("div");reply.className="report-reply";reply.textContent="Admin reply: "+r.reply;box.append(reply)}list.append(box)});
+}
+$("reportForm").addEventListener("submit",e=>{
+ e.preventDefault();if(!$("reportConsent").checked){toast("Local storage consent checkbox tick করো।","error");return}
+ if(reports.length>=100){toast("Local demo limit reached. Export/clear old reports first.","error");return}
+ const report={id:makeId(),name:safeText($("reportName").value,50),category:safeText($("reportCategory").value,40),title:safeText($("reportTitle").value,90),message:safeText($("reportMessage").value,1500),email:safeText($("reportEmail").value,120),status:"Received",reply:"",createdAt:new Date().toISOString(),history:[{event:"Created locally",at:new Date().toISOString()}]};
+ reports.push(report);if(!saveJSON(STORAGE_KEYS.reports,reports))return;renderUserReports();renderAdminTickets();$("reportForm").reset();toast("Ticket created: "+report.id);
+});
+$("refreshReports").addEventListener("click",()=>{reports=readJSON(STORAGE_KEYS.reports,[]);renderUserReports();toast("Local reports refreshed")});
+
+/* STREAMX secure admin login: Firebase email/password + Render UID verification. */
+const STREAMX_API="https://streamx-server-hy40.onrender.com";
+// Shared Firebase client configuration: admin auth and public catalogue must use the same app.
+const STREAMX_FIREBASE_CONFIG={apiKey:'AIzaSyDVYBUJ9Cwp_K7eKQ2nxiklSLZdxRiSYSs',authDomain:'live-tv-pro-160ae.firebaseapp.com',databaseURL:'https://live-tv-pro-160ae-default-rtdb.firebaseio.com',projectId:'live-tv-pro-160ae',storageBucket:'live-tv-pro-160ae.firebasestorage.app',messagingSenderId:'573623404683',appId:'1:573623404683:web:ec3706f1e0b81218e26c8e',measurementId:'G-0QXK2BFPKG'};
+let sxFirebaseAuth=null, sxCurrentUser=null, sxAdminToken=null, sxEditingChannelId=null, sxCloudChannels=[], sxApiBase=STREAMX_API;
+async function getSxAuth(){
+ if(sxFirebaseAuth)return sxFirebaseAuth;
+ const {initializeApp,getApps}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+ const {getAuth}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+ const app=getApps().length?getApps()[0]:initializeApp(STREAMX_FIREBASE_CONFIG);sxFirebaseAuth=getAuth(app);return sxFirebaseAuth;
+}
+function openAdminLogin(){
+ openModal("STREAMX Admin Login",`<p class="privacy-note">Firebase Email/Password দিয়ে login করো। Server তোমার Admin UID যাচাই করবে।</p><form id="sxAdminLoginForm"><input class="field" id="sxAdminEmail" type="email" autocomplete="username" placeholder="Admin email" required><input class="field" id="sxAdminPassword" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:9px"><label class="field-label" style="display:block;margin-top:9px">Server HTTPS URL</label><input class="field" id="sxAdminApi" type="url" value="${STREAMX_API}" required><button class="btn btn-primary" style="margin-top:12px;width:100%" type="submit">Login & verify admin</button></form>`);
+ $("sxAdminLoginForm").addEventListener("submit",async e=>{e.preventDefault();const email=$("sxAdminEmail").value.trim(),password=$("sxAdminPassword").value,api=$("sxAdminApi").value.trim().replace(/\/+$/,'');try{const {signInWithEmailAndPassword}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');const auth=await getSxAuth();const cred=await signInWithEmailAndPassword(auth,email,password);const token=await cred.user.getIdToken(true);const resp=await fetch(api+'/api/admin-check',{headers:{Authorization:'Bearer '+token}});const result=await resp.json().catch(()=>({}));if(!resp.ok||!result.success)throw new Error(result.message||'Server admin verification failed');sxCurrentUser=cred.user;sxAdminToken=token;sxApiBase=api;adminMode=true;document.body.classList.add('admin-mode');$("adminPanel").classList.remove('hidden');closeModal();renderAdminTickets();await sxLoadCloudChannels();await sxRefreshSavedPlaylists();$("adminPanel").scrollIntoView({behavior:'smooth'});toast('Admin login ও server verification সফল');}catch(err){toast('Login/verification failed: '+(err.message||'Invalid login'),'error')}});
+}
+async function sxApi(path,options={}){if(!sxCurrentUser)throw new Error('Admin login required');sxAdminToken=await sxCurrentUser.getIdToken();const resp=await fetch(sxApiBase+path,{...options,headers:{Authorization:'Bearer '+sxAdminToken,...(options.headers||{})}});const data=await resp.json().catch(()=>({}));if(!resp.ok)throw new Error(data.message||'API request failed ('+resp.status+')');return data}
+function sxFormReset(){sxEditingChannelId=null;['sxChannelName','sxChannelUrl','sxChannelLogo','sxChannelCategory','sxChannelCountry','sxChannelDescription'].forEach(id=>$(id).value='');$('sxSaveChannel').textContent='Add channel';$('sxCancelEdit').style.display='none'}
+async function sxLoadCloudChannels(){const status=$('sxCloudStatus');try{const data=await sxApi('/api/channels');sxCloudChannels=Array.isArray(data.channels)?data.channels:(Array.isArray(data.data)?data.data:[]);if(!sxCloudChannels.length&&data.channels&&typeof data.channels==='object')sxCloudChannels=Object.values(data.channels);sxRenderCloudChannels();if(status)status.textContent=`Cloud catalogue: ${sxCloudChannels.length} channels`;}catch(err){if(status)status.textContent=err.message;toast(err.message,'error')}}
+function sxRenderCloudChannels(){const root=$('sxCloudChannelList');root.innerHTML='';if(!sxCloudChannels.length){root.innerHTML='<div class="empty-state">Cloud catalogue empty অথবা load হয়নি। Refresh চাপো।</div>';return}sxCloudChannels.forEach(c=>{const row=document.createElement('div');row.className='admin-ticket';row.style.display='flex';row.style.flexWrap='wrap';row.style.alignItems='center';row.style.gap='8px';const info=document.createElement('div');info.style.flex='1 1 220px';const name=document.createElement('strong');name.textContent=c.name||'Untitled';const meta=document.createElement('p');meta.className='privacy-note';meta.textContent=[c.category||'Other',c.country||'',c.id||''].filter(Boolean).join(' • ');info.append(name,meta);const edit=document.createElement('button');edit.className='btn';edit.textContent='Edit';edit.onclick=()=>{sxEditingChannelId=c.id; $('sxChannelName').value=c.name||'';$('sxChannelUrl').value=c.url||'';$('sxChannelLogo').value=c.logo||'';$('sxChannelCategory').value=c.category||'';$('sxChannelCountry').value=c.country||'';$('sxChannelDescription').value=c.description||'';$('sxSaveChannel').textContent='Save changes';$('sxCancelEdit').style.display='inline-flex';$('sxChannelName').scrollIntoView({behavior:'smooth',block:'center'})};const del=document.createElement('button');del.className='btn btn-danger';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Delete cloud channel '+(c.name||'')+'?'))return;try{await sxApi('/api/channels/'+encodeURIComponent(c.id),{method:'DELETE'});toast('Channel deleted');await sxLoadCloudChannels()}catch(err){toast(err.message,'error')}};row.append(info,edit,del);root.append(row)})}
+$('sxSaveChannel').addEventListener('click',async()=>{const payload={name:$('sxChannelName').value.trim(),url:$('sxChannelUrl').value.trim(),logo:$('sxChannelLogo').value.trim(),category:$('sxChannelCategory').value.trim()||'Other',country:$('sxChannelCountry').value.trim(),description:$('sxChannelDescription').value.trim()};if(!payload.name||!payload.url)return toast('Channel name ও stream URL দরকার','error');if(!/^https:\/\//i.test(payload.url))return toast('HTTPS stream URL দিন','error');try{await sxApi(sxEditingChannelId?'/api/channels/'+encodeURIComponent(sxEditingChannelId):'/api/channels',{method:sxEditingChannelId?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});toast(sxEditingChannelId?'Channel updated':'Channel added');sxFormReset();await sxLoadCloudChannels()}catch(err){toast(err.message,'error')}});
+$('sxCancelEdit').addEventListener('click',sxFormReset);$('sxRefreshChannels').addEventListener('click',sxLoadCloudChannels);
+$('sxImportM3U').addEventListener('click',async()=>{const file=$('sxM3UFile').files[0];if(!file)return toast('M3U file select করো','error');if(file.size>2*1024*1024)return toast('M3U file 2MB limit-এর বেশি','error');try{const content=await file.text();if(!content.trim().startsWith('#EXTM3U'))throw new Error('File-এ #EXTM3U header নেই');const result=await sxApi('/api/playlists/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('sxM3UName').value.trim()||file.name,content,replace:$('sxM3UReplace').checked})});toast(result.message||'Playlist imported');$('sxM3UFile').value='';await sxLoadCloudChannels()}catch(err){toast(err.message,'error')}});
+$('sxExportM3U').href=STREAMX_API+'/api/playlist.m3u';
+let sxSelectedSavedPlaylistId='';
+function sxSavedStatus(message){const el=$('sxSavedPlaylistStatus');if(el)el.textContent=message}
+function sxSavedContent(){const content=$('sxSavedPlaylistContent').value;if(!content.trim().startsWith('#EXTM3U'))throw new Error('M3U content must start with #EXTM3U');return content}
+async function sxRefreshSavedPlaylists(){try{const data=await sxApi('/api/playlists');const select=$('sxSavedPlaylistSelect');select.innerHTML='<option value="">Select saved playlist</option>';(data.playlists||[]).forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=`${p.name} (${p.channelCount||0} channels)`;select.append(o)});if(sxSelectedSavedPlaylistId)select.value=sxSelectedSavedPlaylistId;sxSavedStatus(`${(data.playlists||[]).length} saved playlists`)}catch(err){sxSavedStatus(err.message);toast(err.message,'error')}}
+$('sxSavedPlaylistFile').addEventListener('change',async()=>{const file=$('sxSavedPlaylistFile').files?.[0];if(!file)return;try{const content=await file.text();if(!content.trim().startsWith('#EXTM3U'))throw new Error('Selected file is not a valid M3U playlist');$('sxSavedPlaylistContent').value=content;if(!$('sxSavedPlaylistName').value.trim())$('sxSavedPlaylistName').value=file.name.replace(/\.(m3u8?|txt)$/i,'');sxSavedStatus(`Loaded ${file.name} into editor`)}catch(err){toast(err.message,'error')}});
+$('sxSavedPlaylistSelect').addEventListener('change',e=>{sxSelectedSavedPlaylistId=e.target.value});
+$('sxRefreshSavedPlaylists').addEventListener('click',sxRefreshSavedPlaylists);
+$('sxSavePlaylist').addEventListener('click',async()=>{try{const name=$('sxSavedPlaylistName').value.trim();if(!name)throw new Error('Playlist name required');const content=sxSavedContent();const result=await sxApi('/api/playlists/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,content})});sxSelectedSavedPlaylistId=result.id;sxSavedStatus(`Saved ${result.saved} channels`);toast('Playlist saved to Firebase');await sxRefreshSavedPlaylists()}catch(err){sxSavedStatus(err.message);toast(err.message,'error')}});
+$('sxLoadPlaylist').addEventListener('click',async()=>{const id=$('sxSavedPlaylistSelect').value;if(!id)return toast('Saved playlist select করো','error');try{const data=await sxApi('/api/playlists/'+encodeURIComponent(id));const p=data.playlist;$('sxSavedPlaylistName').value=p.name||'';$('sxSavedPlaylistContent').value=p.content||'';sxSelectedSavedPlaylistId=id;sxSavedStatus(`Loaded ${p.channelCount||0} channels`)}catch(err){toast(err.message,'error')}});
+$('sxUpdatePlaylist').addEventListener('click',async()=>{const id=$('sxSavedPlaylistSelect').value;if(!id)return toast('Update করার playlist select করো','error');try{const name=$('sxSavedPlaylistName').value.trim();if(!name)throw new Error('Playlist name required');const content=sxSavedContent();const result=await sxApi('/api/playlists/'+encodeURIComponent(id),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,content})});sxSelectedSavedPlaylistId=id;sxSavedStatus(`Updated ${result.updated} channels`);toast('Saved playlist updated');await sxRefreshSavedPlaylists()}catch(err){toast(err.message,'error')}});
+$('sxDeletePlaylist').addEventListener('click',async()=>{const id=$('sxSavedPlaylistSelect').value;if(!id)return toast('Delete করার playlist select করো','error');if(!confirm('এই saved playlist স্থায়ীভাবে delete করবে?'))return;try{await sxApi('/api/playlists/'+encodeURIComponent(id),{method:'DELETE'});sxSelectedSavedPlaylistId='';$('sxSavedPlaylistName').value='';$('sxSavedPlaylistContent').value='';sxSavedStatus('Playlist deleted');toast('Saved playlist deleted');await sxRefreshSavedPlaylists()}catch(err){toast(err.message,'error')}});
+async function sxImportSavedPlaylist(replace){const id=$('sxSavedPlaylistSelect').value;if(!id)return toast('Import করার playlist select করো','error');if(replace&&!confirm('বর্তমান cloud channel list মুছে এই playlist দিয়ে replace করবে?'))return;try{const result=await sxApi('/api/playlists/'+encodeURIComponent(id)+'/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({replace})});sxSavedStatus(`Imported ${result.imported} channels (${result.mode})`);toast(`Playlist imported: ${result.imported} channels`);await sxLoadCloudChannels()}catch(err){sxSavedStatus(err.message);toast(err.message,'error')}}
+$('sxImportSavedReplace').addEventListener('click',()=>sxImportSavedPlaylist(true));$('sxImportSavedAppend').addEventListener('click',()=>sxImportSavedPlaylist(false));
+$('adminOpenBtn').addEventListener('click',()=>adminMode?$('adminPanel').scrollIntoView({behavior:'smooth'}):openAdminLogin());
+$('adminLogout').addEventListener('click',async()=>{try{if(sxFirebaseAuth&&sxCurrentUser){const {signOut}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');await signOut(sxFirebaseAuth)}}catch{}sxCurrentUser=null;sxAdminToken=null;adminMode=false;document.body.classList.remove('admin-mode');$('adminPanel').classList.add('hidden');toast('Admin logged out')});
+function renderAdminTickets(){
+ const root=$("adminTickets");if(!root)return;root.innerHTML="";const filter=$("adminFilter")?.value||"All";const items=[...reports].filter(r=>filter==="All"||r.status===filter).reverse();$("adminReportCount").textContent=reports.length+" reports";
+ if(!items.length){root.innerHTML='<div class="empty-state" style="margin-top:12px">No reports match this filter.</div>';return}
+ items.forEach(r=>{
+  const article=document.createElement("article");article.className="admin-ticket";
+  const head=document.createElement("div");head.className="report-top";const title=document.createElement("h3");title.textContent=r.title;const status=document.createElement("span");status.className="report-status";status.textContent=r.status;head.append(title,status);
+  const details=document.createElement("p");details.className="privacy-note";details.textContent=`${r.id} • ${r.category} • ${r.name||"Anonymous"} • ${new Date(r.createdAt).toLocaleString()}${r.email?" • "+r.email:""}`;
+  const msg=document.createElement("p");msg.style.marginTop="8px";msg.textContent=r.message;
+  const reply=document.createElement("textarea");reply.className="field";reply.rows=2;reply.maxLength=1200;reply.placeholder="Write admin reply…";reply.value=r.reply||"";
+  const select=document.createElement("select");select.className="field";select.style.marginTop="8px";["Received","In Review","Needs Info","Resolved","Closed"].forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;o.selected=s===r.status;select.append(o)});
+  const actions=document.createElement("div");actions.className="ticket-actions";const save=document.createElement("button");save.className="btn btn-primary";save.innerHTML='<i class="fa-solid fa-reply"></i> Save reply / status';
+  save.addEventListener("click",()=>{const idx=reports.findIndex(x=>x.id===r.id);if(idx<0)return;reports[idx].reply=safeText(reply.value,1200);reports[idx].status=select.value;reports[idx].updatedAt=new Date().toISOString();reports[idx].history=reports[idx].history||[];reports[idx].history.push({event:"Admin updated local ticket",at:reports[idx].updatedAt,status:select.value});saveJSON(STORAGE_KEYS.reports,reports);renderUserReports();renderAdminTickets();toast("Local reply saved")});
+  const copy=document.createElement("button");copy.className="btn";copy.textContent="Copy ticket ID";copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(r.id);toast("Ticket ID copied")}catch{toast(r.id)}});
+  actions.append(save,copy);article.append(head,details,msg,select,reply,actions);root.append(article);
+ });
+}
+$("adminFilter").addEventListener("change",renderAdminTickets);
+$("exportReports").addEventListener("click",()=>{if(!adminMode)return toast("Admin mode required","error");const blob=new Blob([JSON.stringify(reports,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="streamx-local-reports.json";a.click();URL.revokeObjectURL(url);toast("Report export prepared")});
+$("clearReports").addEventListener("click",()=>{if(!adminMode)return;if(!confirm("Permanently clear all local demo reports from this browser? Export first if needed."))return;reports=[];saveJSON(STORAGE_KEYS.reports,reports);renderUserReports();renderAdminTickets();toast("Local reports cleared")});
+const defaultRelease={version:"Version 1.0.1 • Preview Build",summary:"24 November 2026 preview build — Admin Firebase config scope fix, playlist loading monitor, and clearer live-stream status. This is not a published store release."};
+function loadRelease(){const r=readJSON(STORAGE_KEYS.release,defaultRelease);$("releaseVersion").textContent=r.version;$("releaseSummary").textContent=r.summary;$("releaseVersionInput").value=r.version;$("releaseSummaryInput").value=r.summary}
+$("saveRelease").addEventListener("click",()=>{if(!adminMode)return;const r={version:safeText($("releaseVersionInput").value,40)||defaultRelease.version,summary:safeText($("releaseSummaryInput").value,180)||defaultRelease.summary};saveJSON(STORAGE_KEYS.release,r);loadRelease();toast("Banner saved in this browser. Publish your real release before claiming it is latest.")});
+$("resetRelease").addEventListener("click",()=>{if(!adminMode)return;saveJSON(STORAGE_KEYS.release,defaultRelease);loadRelease();toast("Banner reset")});
+$("editReleaseBtn").addEventListener("click",()=>{if(!adminMode)openAdminLogin();else $("adminPanel").scrollIntoView({behavior:"smooth"})});
+$("viewUpdates").addEventListener("click",()=>$("updateSection").scrollIntoView({behavior:"smooth"}));
+$("dismissBanner").addEventListener("click",()=>$("releaseBanner").classList.add("dismissed"));
+$("themeToggle").addEventListener("click",()=>{const theme=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=theme;saveJSON(STORAGE_KEYS.theme,theme)});
+$("jumpSupport").addEventListener("click",()=>$("supportSection").scrollIntoView({behavior:"smooth"}));
+$("openReportTop").addEventListener("click",()=>$("reportWidget").scrollIntoView({behavior:"smooth"}));$("openReportPlayer").addEventListener("click",()=>$("reportWidget").scrollIntoView({behavior:"smooth"}));
+$("footerSupport").addEventListener("click",()=>$("supportSection").scrollIntoView({behavior:"smooth"}));$("footerUpdates").addEventListener("click",()=>$("updateSection").scrollIntoView({behavior:"smooth"}));
+$("footerPrivacy").addEventListener("click",()=>openModal("Privacy & production checklist",`<p class="privacy-note">This single-file demo stores channels, favourites, theme and reports in localStorage on this browser. Clearing browser data can remove them. It does not sync reports between devices. For production, use authentication, server-enforced authorization, database rules, validation, rate limiting, HTTPS, backups and a clear privacy policy. Never store passwords or private API keys in this file.</p>`));
+$("footerAdmin").addEventListener("click",()=>adminMode?$("adminPanel").scrollIntoView({behavior:"smooth"}):openAdminLogin());
+$("networkStatus").textContent=navigator.onLine?"Browser is online (not a stream guarantee)":"Offline — remote fonts/CDNs/streams may not load";
+window.addEventListener("online",()=>{$("networkStatus").textContent="Browser is online (not a stream guarantee)"});window.addEventListener("offline",()=>{$("networkStatus").textContent="Offline — remote resources may not load"});
+try{const theme=readJSON(STORAGE_KEYS.theme,"dark");document.documentElement.dataset.theme=theme==="light"?"light":"dark"}catch{}
+loadRelease();renderChannels();renderUserReports();renderAdminTickets();updateCounters();
+
+/* FUTURE ROADMAP INDEX — proposals, not activated features.
+   A1: HTML validator and semantic structure audit.
+   A2: CSS syntax lint and undefined variable detection.
+   A3: JavaScript syntax lint and console error capture.
+   A4: Broken link, missing image and duplicate ID detection.
+   A5: Safe auto-fix previews with exact diffs and manual approval.
+   A6: Backup checkpoints and selective rollback.
+   A7: Performance budgets and measured before/after results.
+   A8: Accessibility checks for labels, keyboard use and contrast.
+   A9: Responsive viewport previews and overflow detection.
+   A10: AI code explanations in Bangla and English.
+   A11: Unit test suggestions and regression test checklist.
+   A12: Offline mode with clear cloud-feature status.
+   A13: Git diff review and release tagging.
+   A14: Pre-deployment checks and post-deploy smoke tests.
+   A15: SEO metadata and structured-data validation.
+   A16: Authorized media diagnostics and subtitle support.
+   A17: Local-first diagnostics and privacy-aware exports.
+   A18: User ticket ownership and admin audit trail.
+   A19: Role-based access with server-side enforcement.
+   A20: Cloud AI via protected backend, quota limits and abuse monitoring.
+   A21: Real release feed with verified date, version and changelog.
+   A22: Admin notifications and support assignment.
+   A23: Duplicate report detection and related-ticket links.
+   A24: Internal admin notes separated from public replies.
+   A25: Export/import backup with validation.
+   A26: Content Security Policy and dependency review.
+   A27: Accessibility regression alerts.
+   A28: Dependency update proposals with changelog.
+   A29: Project architecture diagram generation.
+   A30: Natural-language project search with user consent.
+   A31: Local small-model assistance only where hardware supports it.
+   A32: Automated visual regression summaries.
+   A33: Mobile-first performance testing on low-memory devices.
+   A34: Error telemetry with personal data redaction.
+   A35: Staging/production separation and tested rollback plan.
+   A36: Database security rules tests in a local emulator.
+   A37: Firebase App Check and abuse prevention where supported.
+   A38: Admin role assignment through trusted server tooling only.
+   A39: Report attachment scanning and strict file limits.
+   A40: Accessible status announcements for ticket changes.
+   A41: User ticket follow-up messages and privacy-aware retention.
+   A42: Search and pagination for large ticket volumes.
+   A43: Stream playback error classification and retry limits.
+   A44: Stream metadata validation without unauthorized-source discovery.
+   A45: Theme design tokens and contrast-safe color suggestions.
+   A46: Font loading and reduced-motion audits.
+   A47: Security issue explanations with confidence labels.
+   A48: Clear distinction between observed facts and AI guesses.
+   A49: Test outcomes with pass/fail/skipped labels.
+   A50: Release notes published only after the release is real.
+   All roadmap items must be implemented, reviewed and tested before being described as active.
+*/
+</script>
+
+
+
+
+<section class="container section" aria-label="2026 bug fix notes"><div class="card" style="padding:16px"><h2>2026 IPTV Fix Pack</h2><p>Logo fallback, channel-list vs stream URL validation, HLS/native playback paths, animated loading overlay, and playback error status.</p><p>Reminder: real channel access depends on a valid authorized stream URL and the provider's availability, CORS, codec and region rules.</p></div></section>
+
+<script>
+/* STREAMX device mode, country filtering, low-data controls and Firebase read sync */
+(()=>{
+ const $=id=>document.getElementById(id);
+function setFirebaseSignal(connected){const root=$("firebaseSignal"),label=$("firebaseSignalText");if(!root||!label)return;root.style.background=connected?"#ecfdf3":"#fff1f2";root.style.color=connected?"#067647":"#b42336";root.style.borderColor=connected?"#abefc6":"#fecdd3";const dot=root.querySelector(".dot");if(dot)dot.style.background=connected?"#16a34a":"#dc2626";label.textContent=connected?"Firebase সংযুক্ত":"Firebase সংযুক্ত নয়"}
+
+ const modeKey='streamx_device_mode_v1';
+ function setMode(mode){localStorage.setItem(modeKey,mode);document.body.classList.toggle('sx-tv-mode',mode==='tv');$('sxModeLabel').textContent=mode==='tv'?'Smart TV Mode':'Mobile Mode';$('sxDeviceGate').style.display='none';}
+ document.querySelectorAll('[data-sx-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.sxMode)));
+ const saved=localStorage.getItem(modeKey);if(saved==='tv'||saved==='mobile')setMode(saved);else $('sxDeviceGate').style.display='grid';
+ // Country cards filter existing channel objects by their optional country property.
+ const countries=[['All','🌐','All countries'],['Bangladesh','🇧🇩','Bangladesh'],['India','🇮🇳','India'],['Pakistan','🇵🇰','Pakistan'],['United States','🇺🇸','USA'],['United Kingdom','🇬🇧','UK'],['Other','📡','Other']];
+ const grid=$('sxCountryGrid');let active='All';
+ function drawCountries(){grid.innerHTML='';countries.forEach(([key,flag,label])=>{const b=document.createElement('button');b.className='sx-country-btn'+(active===key?' active':'');b.innerHTML='<span class="flag">'+flag+'</span><span>'+label+'</span>';b.addEventListener('click',()=>{active=key;activeCountry=key;drawCountries();if(typeof renderChannels==='function')renderChannels()});grid.append(b)})}
+ drawCountries();
+ // HLS quality selector uses provider-available levels only; no bitrate can be invented.
+ const player=$('mainVideo');if(player){player.setAttribute('playsinline','');player.preload='none';}
+ // Connection hint: Network Information API is advisory and may be unavailable.
+ try{const n=navigator.connection;if(n){const label=n.effectiveType||'network';const save=n.saveData?' • Data Saver ON':'';const hint=document.createElement('div');hint.className='notice';hint.style.marginTop='10px';hint.textContent='Network: '+label+save+' • Low-buffer profile enabled where supported.';const slot=$('playerUtilities');if(slot)slot.before(hint);}}catch(e){}
+ // Firebase public channel catalogue listener. Admin writes intentionally remain disabled until secure auth + DB rules exist.
+ const status=$('networkStatus');
+ (async()=>{try{const {initializeApp,getApps}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');const {getDatabase,ref,onValue}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');const app=getApps().length?getApps()[0]:initializeApp(STREAMX_FIREBASE_CONFIG);const db=getDatabase(app);onValue(ref(db,'streamx/public/channels'),snap=>{setFirebaseSignal(true);if(status)status.textContent='Firebase read connected • public catalogue only; admin writes not enabled';const data=snap.val();if(!data)return;const arr=Array.isArray(data)?data:Object.values(data);if(!Array.isArray(arr))return;const valid=arr.filter(c=>c&&c.id&&c.name&&c.url);if(valid.length)window.dispatchEvent(new CustomEvent('streamx-cloud-channels',{detail:valid}));},err=>{setFirebaseSignal(false);if(status)status.textContent='Firebase read unavailable • local mode active';});}catch(e){if(status)status.textContent='Firebase সংযোগ হয়নি। HTTPS Hosting, Database Rules ও নেটওয়ার্ক পরীক্ষা করুন।';}})();
+ // Public cloud channel API fallback; merges with Firebase listener catalogue when available.
+ (async()=>{try{const r=await fetch('https://streamx-server-hy40.onrender.com/api/channels');if(!r.ok)return;const d=await r.json();let arr=Array.isArray(d.channels)?d.channels:(Array.isArray(d.data)?d.data:[]);if(!arr.length&&d.channels&&typeof d.channels==='object')arr=Object.values(d.channels);if(arr.length)window.dispatchEvent(new CustomEvent('streamx-cloud-channels',{detail:arr}));}catch{}})();
+ window.addEventListener('streamx-cloud-channels',e=>{try{const remote=e.detail;if(!Array.isArray(remote))return;const local=JSON.parse(localStorage.getItem('streamx2026.channels')||'[]');const map=new Map();[...local,...remote].forEach(c=>map.set(c.id,c));localStorage.setItem('streamx2026.channels',JSON.stringify([...map.values()]));if(typeof renderChannels==='function')renderChannels();}catch(e){}});
+
+ // Admin-selected favourite shelf. It is deliberately local-only until secure
+ // Firebase Authentication + server-enforced admin rules are configured.
+ const favShelf=document.createElement('section');
+ favShelf.className='container section card sx-admin-fav-shelf';
+ favShelf.style.padding='16px';
+ favShelf.hidden=false;
+ favShelf.innerHTML='<div class="section-heading"><div><h2>⭐ Admin Favourite Channels</h2><p>Admin chooses which channels appear in this featured shelf</p></div><span class="sx-mode-pill">Admin controls</span></div><div class="sx-admin-fav-controls"><select id="sxFavSelect" class="field"><option value="">Choose a channel</option></select><button id="sxFavAdd" class="btn btn-primary" type="button">Add to featured</button></div><div id="sxAdminFavs" class="sx-country-grid"></div><p class="privacy-note" style="margin-top:10px">এই তালিকা আপাতত এই ব্রাউজারে সংরক্ষিত হয়। Secure Firebase Admin setup না হওয়া পর্যন্ত অন্য ডিভাইসে sync হবে না।</p>';
+ const library=document.querySelector('.channels-grid');
+ if(library)library.parentNode.insertBefore(favShelf,library);
+ function getAdminFavIds(){try{return JSON.parse(localStorage.getItem('streamx_admin_favorites_v1')||'[]')}catch{return []}}
+ function renderAdminFavs(){
+   const root=$('sxAdminFavs');if(!root)return;
+   const ids=getAdminFavIds();root.innerHTML='';
+   ids.forEach(id=>{
+     const item=(channels||[]).find(c=>c.id===id);if(!item)return;
+     const b=document.createElement('button');b.className='sx-country-btn';b.type='button';
+     const logo=document.createElement('img');logo.src=item.logo||placeholderIcon(item.name);logo.alt='';logo.loading='lazy';logo.onerror=()=>{logo.onerror=null;logo.src=placeholderIcon(item.name)};
+     logo.style.cssText='width:36px;height:36px;border-radius:50%;object-fit:cover';
+     const label=document.createElement('span');label.textContent=item.name;
+     const remove=document.createElement('button');remove.className='sx-admin-fav-remove';remove.type='button';remove.textContent='Remove';remove.title='Remove from admin featured';
+     remove.addEventListener('click',e=>{e.stopPropagation();const next=getAdminFavIds().filter(x=>x!==id);localStorage.setItem('streamx_admin_favorites_v1',JSON.stringify(next));renderAdminFavs();});
+     b.append(logo,label,remove);
+     b.addEventListener('click',e=>{if(e.target===remove)return;playChannel(item.id)});
+     root.append(b);
+   });
+   if(!root.children.length)root.textContent='এখনো কোনো Admin Featured Channel যোগ করা হয়নি। Admin panel থেকে channel নির্বাচন করো।';
+ }
+ function fillFavSelect(){
+   const sel=$('sxFavSelect');if(!sel)return;const keep=sel.value;
+   sel.innerHTML='<option value="">Choose a channel</option>';
+   (channels||[]).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;sel.append(o)});
+   sel.value=keep;
+ }
+ $('sxFavAdd').addEventListener('click',()=>{
+   if(!adminMode){toast('Admin mode required.','error');return}
+   const sel=$('sxFavSelect');if(!sel.value)return;
+   const ids=getAdminFavIds();if(!ids.includes(sel.value))ids.push(sel.value);
+   localStorage.setItem('streamx_admin_favorites_v1',JSON.stringify(ids));
+   renderAdminFavs();toast('Added to Admin Featured Channels');
+ });
+ const syncAdminFavVisibility=()=>{
+   favShelf.hidden=false;
+   if(adminMode){fillFavSelect();renderAdminFavs()}else{renderAdminFavs()}
+ };
+ const originalAdminOpen=window.streamxAdminModeChanged;
+ window.streamxAdminModeChanged=syncAdminFavVisibility;
+ const observer=new MutationObserver(syncAdminFavVisibility);
+ const adminPanel=$('adminPanel');if(adminPanel)observer.observe(adminPanel,{attributes:true,attributeFilter:['class']});
+ document.addEventListener('click',e=>{
+   if(e.target.closest('#enterDemoAdmin'))setTimeout(syncAdminFavVisibility,0);
+   if(e.target.closest('#adminLogout'))setTimeout(syncAdminFavVisibility,0);
+ });
+ renderAdminFavs();fillFavSelect();
+ window.addEventListener('streamx-cloud-channels',()=>{fillFavSelect();renderAdminFavs()});
+
+})();
+</script>
+
+
+<script>
+/* STREAMX multi-platform feature pack: local-device features with explicit backend boundaries. */
+(()=>{
+ const $=id=>document.getElementById(id);
+ const safeRead=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch{return d}};
+ const safeWrite=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}};
+ const HISTORY_KEY='streamx_watch_history_v1', MULTI_KEY='streamx_multi_playlists_v1', EPG_KEY='streamx_epg_v1', PIN_KEY='streamx_parental_pin_v1', LOCK_KEY='streamx_parental_locked_v1', SETTINGS_KEY='streamx_platform_settings_v1';
+ let epgPrograms=safeRead(EPG_KEY,[]), multiPlaylists=safeRead(MULTI_KEY,[]);
+ const getChannels=()=>Array.isArray(channels)?channels:[];
+ function isTv(){return document.body.classList.contains('sx-tv-mode')}
+ function showRemoteHelp(){toast('TV Remote: ↑ ↓ ← → focus • Enter/OK select • Backspace/Escape back • ChannelUp/Down switch channel')}
+ $('sxTvModeToggle')?.addEventListener('click',()=>{const modes=['tv','android','web'];let current='mobile';try{current=localStorage.getItem('streamx_device_mode_v1')||'android'}catch{}const next=modes[(modes.indexOf(current)+1)%modes.length];document.body.classList.toggle('sx-tv-mode',next==='tv');document.body.classList.toggle('sx-android-mode',next==='android');document.body.classList.toggle('sx-web-mode',next==='web');try{localStorage.setItem('streamx_device_mode_v1',next)}catch{}const label=$('sxModeLabel');if(label)label.textContent=next==='tv'?'Smart TV Mode':next==='android'?'Android Mode':'Web Mode';const btn=$('sxTvModeToggle');if(btn)btn.textContent='Mode: '+(next==='tv'?'TV':next==='android'?'Android':'Web')+' • Switch';toast(next.toUpperCase()+' mode enabled')});
+ $('sxRemoteHelp')?.addEventListener('click',showRemoteHelp);
+ function getVisibleChannelCards(){return [...document.querySelectorAll('#channelsGrid .channel-card')]}
+ document.addEventListener('keydown',e=>{
+   if(!isTv())return;
+   const tag=(document.activeElement?.tagName||'').toLowerCase();
+   if(['input','textarea','select'].includes(tag))return;
+   const cards=getVisibleChannelCards();const current=cards.indexOf(document.activeElement);
+   if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp'].includes(e.key)&&cards.length){
+     e.preventDefault();const delta=(e.key==='ArrowRight'||e.key==='ArrowDown')?1:-1;cards[(current<0?0:(current+delta+cards.length)%cards.length)].focus();return;
+   }
+   if((e.key==='Enter'||e.key===' ')&&document.activeElement?.classList.contains('channel-card')){e.preventDefault();document.activeElement.click();return}
+   if(e.key==='Escape'||e.key==='Backspace'){const sidebar=$('playerSidebar');if(sidebar?.classList.contains('open')){sidebar.classList.remove('open');e.preventDefault()}}
+   if(e.key==='PageDown'||e.key==='ChannelDown'){e.preventDefault();switchChannel(1)}
+   if(e.key==='PageUp'||e.key==='ChannelUp'){e.preventDefault();switchChannel(-1)}
+ });
+ function switchChannel(delta){const list=getChannels();if(!list.length||typeof window.playChannel!=='function')return;const current=list.findIndex(c=>c.id===currentChannel?.id);const next=list[(Math.max(0,current)+delta+list.length)%list.length];window.playChannel(next.id)}
+ // Add keyboard semantics to dynamically-created channel cards.
+ const cardObserver=new MutationObserver(()=>getVisibleChannelCards().forEach(c=>{if(!c.hasAttribute('tabindex')){c.tabIndex=0;c.setAttribute('role','button')}}));
+ const channelRoot=$('channelsGrid');if(channelRoot)cardObserver.observe(channelRoot,{childList:true});
+ // Watch history: selection is recorded when the user actually starts a channel.
+ window.addEventListener('streamx-channel-started',e=>recordHistory(e.detail));
+ function recordHistory(channel){if(!channel?.id)return;let items=safeRead(HISTORY_KEY,[]);items=[{id:channel.id,name:channel.name,at:new Date().toISOString()},...items.filter(x=>x.id!==channel.id)].slice(0,30);safeWrite(HISTORY_KEY,items);renderHistory()}
+ function renderHistory(){const root=$('sxWatchHistory');if(!root)return;const items=safeRead(HISTORY_KEY,[]);root.innerHTML='';if(!items.length){root.textContent='No watch history yet.';return}items.slice(0,8).forEach(x=>{const row=document.createElement('div');row.className='sx-history-item';const name=document.createElement('span');name.textContent=x.name;const btn=document.createElement('button');btn.className='btn';btn.type='button';btn.textContent='Play';btn.addEventListener('click',()=>{if(typeof window.playChannel==='function')window.playChannel(x.id)});row.append(name,btn);root.append(row)})}
+ $('sxClearHistory')?.addEventListener('click',()=>{safeWrite(HISTORY_KEY,[]);renderHistory();toast('Watch history cleared')});
+ // Multiple local M3U playlists.
+ function parseLocalM3U(raw){const lines=raw.replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];let meta=null;for(const line0 of lines){const line=line0.trim();if(!line)continue;if(line.startsWith('#EXTINF')){const comma=line.indexOf(',');const attrs=comma>=0?line.slice(0,comma):line;const name=comma>=0?line.slice(comma+1).trim():'Channel';const get=(re)=>{const m=attrs.match(re);return m?m[1]:''};meta={name:name||'Channel',logo:get(/tvg-logo="([^"]*)"/i),category:get(/group-title="([^"]*)"/i)||'Other',tvgId:get(/tvg-id="([^"]*)"/i)}}else if(!line.startsWith('#')&&/^https:\/\//i.test(line)){out.push({id:'MPL-'+Math.random().toString(36).slice(2,10),name:meta?.name||'Channel '+(out.length+1),logo:meta?.logo||'',category:meta?.category||'Other',url:line,epgId:meta?.tvgId||'',source:'multi-playlist'});meta=null}}return out}
+ function renderMulti(){const root=$('sxMultiPlaylistList');if(!root)return;root.innerHTML='';if(!multiPlaylists.length){root.textContent='No local playlists added.';return}multiPlaylists.forEach((p,i)=>{const row=document.createElement('div');row.className='sx-playlist-item';const label=document.createElement('span');label.textContent=p.name+' • '+p.channels.length+' channels';const actions=document.createElement('div');const activate=document.createElement('button');activate.className='btn btn-primary';activate.type='button';activate.textContent='Activate';activate.addEventListener('click',()=>{if(!confirm('Replace the current local channel list with this playlist?'))return;try{channels=p.channels;localStorage.setItem('streamx2026.channels',JSON.stringify(p.channels));renderChannels();toast('Playlist activated: '+p.name)}catch{toast('Storage is full; playlist could not be activated','error')}});const remove=document.createElement('button');remove.className='btn';remove.type='button';remove.textContent='Remove';remove.addEventListener('click',()=>{multiPlaylists.splice(i,1);safeWrite(MULTI_KEY,multiPlaylists);renderMulti()});actions.append(activate,remove);row.append(label,actions);root.append(row)})}
+ $('sxAddMultiPlaylist')?.addEventListener('click',async()=>{const file=$('sxMultiPlaylistFile')?.files?.[0];if(!file)return toast('Choose an M3U playlist file first','error');if(file.size>15*1024*1024)return toast('Playlist file exceeds 15 MB limit','error');try{const text=await file.text();const parsed=parseLocalM3U(text);if(!parsed.length)return toast('No valid HTTPS channel URLs found','error');const name=($('sxMultiPlaylistName')?.value||file.name).trim().slice(0,80)||'Playlist';multiPlaylists.push({id:'PL-'+Date.now(),name,channels:parsed});if(!safeWrite(MULTI_KEY,multiPlaylists)){multiPlaylists.pop();return toast('Browser storage full','error')}renderMulti();$('sxMultiPlaylistFile').value='';toast('Playlist saved locally: '+parsed.length+' channels')}catch(err){toast('Playlist read failed: '+err.message,'error')}});
+ // XMLTV guide parser: stores compact programme metadata only.
+ $('sxEpgImport')?.addEventListener('click',async()=>{const file=$('sxEpgFile')?.files?.[0];if(!file)return toast('Choose an XMLTV .xml file first','error');if(file.size>20*1024*1024)return toast('EPG file exceeds 20 MB limit','error');try{const raw=await file.text();const doc=new DOMParser().parseFromString(raw,'application/xml');if(doc.querySelector('parsererror'))return toast('Invalid XMLTV file','error');const programs=[...doc.querySelectorAll('programme')].slice(0,10000).map(p=>({channel:p.getAttribute('channel')||'',start:p.getAttribute('start')||'',stop:p.getAttribute('stop')||'',title:p.querySelector('title')?.textContent?.trim()||'Untitled'})).filter(p=>p.start&&p.title);epgPrograms=programs;safeWrite(EPG_KEY,epgPrograms);renderEpg();toast('EPG imported: '+programs.length+' programmes')}catch(err){toast('EPG import failed: '+err.message,'error')}});
+ function parseXmlTime(s){const m=String(s||'').match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})?\s*([+-]\d{4})?/);if(!m)return null;const base=`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]||'00'}`;const offset=m[7]||'+0000';return new Date(base+offset.slice(0,3)+':'+offset.slice(3))}
+ function renderEpg(){const now=Date.now();const selected=typeof currentChannel!=='undefined'&&currentChannel?(currentChannel.epgId||currentChannel.name||''):'';const current=epgPrograms.find(p=>{const a=parseXmlTime(p.start),b=parseXmlTime(p.stop);return (!selected||p.channel===selected||p.channel.toLowerCase()===String(selected).toLowerCase())&&a&&b&&a.getTime()<=now&&b.getTime()>now});const next=current?epgPrograms.filter(p=>p.channel===current.channel&&parseXmlTime(p.start)?.getTime()>now).sort((a,b)=>parseXmlTime(a.start)-parseXmlTime(b.start))[0]:epgPrograms.filter(p=>parseXmlTime(p.start)?.getTime()>now).sort((a,b)=>parseXmlTime(a.start)-parseXmlTime(b.start))[0];$('sxEpgNow').textContent=current?'Now: '+current.title:'No current programme matched.';$('sxEpgNext').textContent=next?'Next: '+next.title+' • '+parseXmlTime(next.start).toLocaleString():'No upcoming programme found.'}
+ // Local parental lock. Not a replacement for account-level content authorization.
+ function setLocked(value){safeWrite(LOCK_KEY,!!value);const root=$('channelsGrid');if(root)root.classList.toggle('sx-parental-lock',!!value);$('sxParentalStatus').textContent=value?'Channels locked on this device.':'Parental lock is off.'}
+ $('sxSetParentalPin')?.addEventListener('click',()=>{const a=prompt('Set a new 4–8 digit parental PIN:');if(!a)return;if(!/^\d{4,8}$/.test(a))return toast('PIN must contain 4–8 digits','error');const b=prompt('Confirm PIN:');if(a!==b)return toast('PIN confirmation did not match','error');safeWrite(PIN_KEY,a);toast('Local PIN saved')});
+ $('sxLockChannels')?.addEventListener('click',()=>{if(!safeRead(PIN_KEY,''))return toast('Set a parental PIN first','error');setLocked(true)});
+ $('sxUnlockChannels')?.addEventListener('click',()=>{const pin=safeRead(PIN_KEY,'');if(!pin)return setLocked(false);const attempt=prompt('Enter parental PIN:');if(attempt===pin){setLocked(false);toast('Channels unlocked')}else toast('Incorrect PIN','error')});
+ // Network status: browser connectivity is not a guarantee that an individual stream works.
+ function refreshNetwork(){const online=navigator.onLine;const conn=navigator.connection||navigator.mozConnection||navigator.webkitConnection;const type=conn?.effectiveType||'unknown';const down=Number(conn?.downlink);$('sxNetworkState').textContent=online?'Online • '+type:'Offline';$('sxNetworkMeter').style.width=online?(Number.isFinite(down)?Math.min(100,down/10*100):55)+'%':'0%';$('sxNetworkDetails').textContent='Estimated downlink: '+(Number.isFinite(down)?down+' Mbps':'not provided')+' • Stream availability is provider-dependent.'}
+ $('sxNetworkRefresh')?.addEventListener('click',refreshNetwork);window.addEventListener('online',refreshNetwork);window.addEventListener('offline',refreshNetwork);navigator.connection?.addEventListener?.('change',refreshNetwork);
+ // Release settings and optional JSON update manifest check.
+ const settings=safeRead(SETTINGS_KEY,{version:'1.1.0 Preview',manifest:''});
+ if($('sxAdminBuildVersion'))$('sxAdminBuildVersion').value=settings.version||'1.1.0 Preview';
+ if($('sxUpdateManifest'))$('sxUpdateManifest').value=settings.manifest||'';
+ $('sxSavePlatformSettings')?.addEventListener('click',()=>{if(!adminMode)return toast('Admin login required','error');const next={version:$('sxAdminBuildVersion').value.trim().slice(0,40)||'1.1.0 Preview',manifest:$('sxUpdateManifest').value.trim()};safeWrite(SETTINGS_KEY,next);$('sxUpdateStatus').textContent='Saved locally. Publish a matching app build separately.';toast('Platform settings saved on this device')});
+ $('sxCheckAppUpdate')?.addEventListener('click',async()=>{const url=$('sxUpdateManifest').value.trim();if(!url)return $('sxUpdateStatus').textContent='No update manifest URL configured.';try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();$('sxUpdateStatus').textContent='Manifest: '+String(d.version||'unknown')+' • '+String(d.message||'No release notes');}catch(e){$('sxUpdateStatus').textContent='Update check failed: '+e.message+' (CORS/network may block it).'}});
+ renderMulti();renderHistory();renderEpg();refreshNetwork();setLocked(safeRead(LOCK_KEY,false));
+ // Wrap player function to record watch selection when channel playback is requested.
+ if(typeof window.playChannel==='function'&&!window.playChannel.__sxHistoryWrapped){const original=window.playChannel;const wrapped=function(id){const c=getChannels().find(x=>x.id===id);if(c)recordHistory(c);return original.apply(this,arguments)};wrapped.__sxHistoryWrapped=true;window.playChannel=wrapped}
+})();
+</script>
+
+
+<script>
+/* STREAMX update policy: client-side policy editor + validated manifest preview.
+   Publishing, forced app installation and cross-device persistence require trusted backend/build infrastructure. */
+(()=>{
+ const $=id=>document.getElementById(id);
+ const KEY='streamx_update_policy_v1';
+ const defaults={channel:'stable',minVersion:'1.0.0',requirement:'optional',rollout:10,platforms:'Android Mobile, Android TV, Web/PWA',notes:'Performance tuning, security fixes, compatibility checks and tested release notes.'};
+ const read=()=>{try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...defaults}}};
+ const write=v=>{try{localStorage.setItem(KEY,JSON.stringify(v));return true}catch{return false}};
+ const fields=['sxPolicyChannel','sxPolicyMinVersion','sxPolicyMandatory','sxPolicyRollout','sxPolicyPlatforms','sxPolicyNotes'];
+ function getPolicy(){return {channel:$('sxPolicyChannel')?.value||defaults.channel,minVersion:$('sxPolicyMinVersion')?.value.trim()||defaults.minVersion,requirement:$('sxPolicyMandatory')?.value||defaults.requirement,rollout:Math.max(1,Math.min(100,Number($('sxPolicyRollout')?.value)||10)),platforms:$('sxPolicyPlatforms')?.value.trim()||defaults.platforms,notes:$('sxPolicyNotes')?.value.trim()||defaults.notes,updatedAt:new Date().toISOString()}}
+ function setPolicy(p){if($('sxPolicyChannel'))$('sxPolicyChannel').value=p.channel;if($('sxPolicyMinVersion'))$('sxPolicyMinVersion').value=p.minVersion;if($('sxPolicyMandatory'))$('sxPolicyMandatory').value=p.requirement;if($('sxPolicyRollout'))$('sxPolicyRollout').value=p.rollout;if($('sxPolicyPlatforms'))$('sxPolicyPlatforms').value=p.platforms;if($('sxPolicyNotes'))$('sxPolicyNotes').value=p.notes}
+ setPolicy(read());
+ $('sxSaveUpdatePolicy')?.addEventListener('click',()=>{if(!window.adminMode)return toast('Admin login required','error');const p=getPolicy();if(!/^\d+\.\d+\.\d+([-.][a-zA-Z0-9.-]+)?$/.test(p.minVersion))return toast('Use version format like 1.2.3','error');if(!write(p))return toast('Could not save policy: browser storage full','error');$('sxPolicySaveStatus').textContent='Saved locally • '+new Date().toLocaleString()+' • backend sync not configured';toast('Update rules saved on this device')});
+ $('sxExportUpdatePolicy')?.addEventListener('click',()=>{if(!window.adminMode)return toast('Admin login required','error');const blob=new Blob([JSON.stringify(getPolicy(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='streamx-update-policy.json';a.click();URL.revokeObjectURL(url)});
+ const mode=(()=>{try{return localStorage.getItem('streamx_device_mode_v1')||'android'}catch{return 'android'}})();
+ document.body.classList.toggle('sx-tv-mode',mode==='tv');document.body.classList.toggle('sx-android-mode',mode==='android');document.body.classList.toggle('sx-web-mode',mode==='web');
+ if($('sxModeLabel'))$('sxModeLabel').textContent=mode==='tv'?'Smart TV Mode':mode==='web'?'Web Mode':'Android Mode';
+ if($('sxTvModeToggle'))$('sxTvModeToggle').textContent='Mode: '+mode.toUpperCase()+' • Switch';
+})();
+</script>
+
+
+<script>
+(()=>{
+ const widget=document.getElementById('sxCategoriesWidget');
+ const toggle=document.getElementById('sxCategoryToggle');
+ const grid=document.getElementById('categoryGrid');
+ if(!widget||!toggle||!grid)return;
+ const mobile=()=>window.matchMedia('(max-width:800px)').matches;
+ const apply=()=>{if(mobile()){widget.classList.add('sx-collapsed');toggle.setAttribute('aria-expanded','false');toggle.textContent='ফিল্টার দেখুন'}else{widget.classList.remove('sx-collapsed');toggle.setAttribute('aria-expanded','true');toggle.textContent='Filter'}};
+ toggle.addEventListener('click',()=>{if(!mobile())return;const collapsed=widget.classList.toggle('sx-collapsed');toggle.setAttribute('aria-expanded',String(!collapsed));toggle.textContent=collapsed?'ফিল্টার দেখুন':'ফিল্টার লুকান'});
+ window.addEventListener('resize',apply,{passive:true});apply();
+})();
+</script>
+
+</body>
+
+<!--
+STREAMX PRO ULTRA AI OPTIMIZER — FUTURE ROADMAP APPENDIX
+This appendix documents proposals; it does not activate them by itself.
+
+CORE EDITOR AND PROJECT WORKFLOW
+001. Project-wide search, file switching, syntax highlighting, bracket matching, formatter integration, local backups, Git diff review, restore points, clear unsaved-change warnings, and large-file safeguards.
+002. Support HTML, CSS, JavaScript, JSON, Markdown and common project configuration files with explicit tool-version reporting.
+003. Do not silently replace source files. Show a diff, create a backup, ask for confirmation and provide undo for every AI-proposed edit.
+
+BUG DETECTION AND DIAGNOSTICS
+004. Validate HTML semantics, CSS syntax, JavaScript syntax and JSON syntax. Detect duplicate IDs, broken internal links, missing local assets, undefined CSS variables and unhandled promise rejections.
+005. Collect only user-approved diagnostics. Redact API tokens, cookies, private URLs, email addresses and personal identifiers before export.
+006. Label every finding as error, warning, information or unverified suggestion. Never claim that checks passed unless they actually ran.
+
+PERFORMANCE AND ACCESSIBILITY
+007. Measure page-load timings, asset sizes, render-blocking resources, image dimensions, layout shifts, long tasks and repeated network calls before recommending optimization.
+008. Check keyboard navigation, visible focus, labels, heading order, alternative text, contrast, reduced motion, zoom and touch target sizes.
+009. Report measured changes rather than promising a guaranteed score or speed increase.
+
+AI ASSISTANT AND SAFE FIXES
+010. Explain selected code in Bangla and English, summarize project structure, draft tests, create documentation, and suggest fixes from plain-language requests.
+011. Cloud AI must be connected through a protected backend. Never embed private model API keys or privileged server credentials in frontend HTML.
+012. Show source files used as context, mark uncertain statements, require confirmation before editing, and keep a rollback history.
+
+USER REPORT AND ADMIN REPLY
+013. Create unique ticket IDs, timestamps, categories, status history, user follow-up messages, admin replies, and clear received/resolved states.
+014. Authenticated users must see only their own tickets. Authorized support staff may see assigned tickets. Admin-wide access must be enforced by trusted backend authorization.
+015. Use input limits, validation, spam protection, attachment restrictions, audit logs, retention rules and a privacy notice.
+
+SECURE FIREBASE INTEGRATION
+016. Configure Firebase Authentication before collecting real user reports. Use server-enforced Realtime Database Security Rules that deny access by default.
+017. Use custom claims or another trusted server-controlled role mechanism for admin privileges; never trust a client-side boolean, hidden button, hard-coded password or secret URL.
+018. Enable appropriate App Check, quotas, monitoring and alerting. Test access rules with the Firebase Local Emulator Suite before deployment.
+019. Keep service-account keys, admin SDK credentials and private AI provider keys outside the public site. Public Firebase configuration is not a substitute for security rules.
+
+MEDIA PLAYER AND CHANNEL MANAGEMENT
+020. Support browser-compatible direct media URLs and HLS where the browser or HLS.js supports it. Display useful loading, buffering and failure states.
+021. Check that a media source is authorized for distribution. Respect provider access controls, browser CORS rules, licensing and autoplay restrictions.
+022. Support categories, favourites, search, metadata validation, logo fallbacks, channel removal confirmation and player cleanup when switching sources.
+
+2026 RELEASE BANNER
+023. Show an accurate version, actual publication date, short changelog, known issues and release status. Distinguish Preview, Testing, Released and Rolled Back.
+024. Allow authorized maintainers to publish release notes from a trusted source. Do not represent planned features or a locally edited label as an official verified update.
+025. Preserve old release notes and provide a rollback announcement if a release is withdrawn.
+
+TESTING AND DEPLOYMENT
+026. Use smoke tests for main user journeys, malformed form input tests, mobile viewport tests, keyboard-only tests and regression checks after changes.
+027. Validate publish directory, case-sensitive asset paths, HTTPS, redirects, missing assets, error pages and deployed build identifiers.
+028. Separate staging from production, keep backups, verify restoration, inspect diffs and maintain a tested rollback plan.
+
+OFFLINE, PRIVACY AND RELIABILITY
+029. Clearly label local-only features and cloud-only features. Do not imply that cloud AI, remote tickets or live streams work without network access.
+030. Use timeouts and bounded retries. Provide cancel actions for long scans, meaningful error messages, safe recovery and a local export option.
+031. Ask before sending source code or diagnostics to a remote service. Explain data collection and deletion/retention choices.
+
+FUTURE EXPERIMENTS
+032. Natural-language project search, visual regression summaries, architecture diagrams, code impact analysis, design token consistency, screenshot-to-layout drafts and test scenario generation.
+033. Local model assistance only when a compatible runtime and device resources are available. Do not pretend an offline rule-based helper is a full AI model.
+034. Automated dependency update proposals, license checks, staging preview, release summaries, accessible status alerts and privacy-preserving telemetry.
+
+End of roadmap appendix. Implement and test each feature before claiming it is live.
+-->
+
+<!-- EXTENDED IMPLEMENTATION CHECKLIST — PLANNED ITEMS ONLY
+001. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+002. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+003. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+004. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+005. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+006. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+007. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+008. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+009. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+010. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+011. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+012. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+013. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+014. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+015. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+016. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+017. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+018. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+019. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+020. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+021. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+022. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+023. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+024. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+025. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+026. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+027. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+028. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+029. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+030. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+031. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+032. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+033. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+034. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+035. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+036. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+037. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+038. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+039. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+040. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+041. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+042. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+043. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+044. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+045. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+046. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+047. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+048. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+049. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+050. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+051. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+052. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+053. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+054. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+055. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+056. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+057. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+058. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+059. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+060. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+061. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+062. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+063. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+064. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+065. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+066. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+067. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+068. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+069. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+070. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+071. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+072. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+073. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+074. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+075. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+076. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+077. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+078. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+079. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+080. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+081. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+082. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+083. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+084. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+085. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+086. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+087. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+088. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+089. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+090. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+091. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+092. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+093. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+094. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+095. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+096. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+097. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+098. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+099. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+100. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+101. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+102. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+103. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+104. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+105. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+106. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+107. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+108. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+109. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+110. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+111. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+112. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+113. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+114. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+115. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+116. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+117. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+118. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+119. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+120. Future checklist item: review requirement, implement in a branch, add tests, inspect the diff, document limitations, and verify rollback before release.
+-->
+</html>
+
+<!-- Build note: full filtered channel list is rendered in one pass; no “Load next 100” control or pagination. -->
